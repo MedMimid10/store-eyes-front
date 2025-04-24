@@ -1,12 +1,21 @@
 import { Feather } from '@expo/vector-icons';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import CarteService from '../components/CarteService';
 import StatisticCard from '../components/StatisticCard';
+import '../i18n'; // Import i18n configuration
 
-const TimeFilterOptions = ['Today', 'Last Week', 'Last Month'];
+interface HomeScreenProps {
+  onLogout: () => void;
+}
 
-const HomeScreen = () => {
+const HomeScreen = ({ onLogout }: HomeScreenProps) => {
+  const { t, i18n } = useTranslation();
+  
+  // Update TimeFilterOptions to use translations
+  const TimeFilterOptions = [t('today'), t('lastWeek'), t('lastMonth')];
+  
   const [selectedTimeFilter, setSelectedTimeFilter] = useState(TimeFilterOptions[0]);
   const [showTimeFilterDropdown, setShowTimeFilterDropdown] = useState(false);
   
@@ -19,24 +28,37 @@ const HomeScreen = () => {
     setShowTimeFilterDropdown(false);
   };
   
+  // Toggle language function
+  const toggleLanguage = () => {
+    const newLanguage = i18n.language === 'en' ? 'fr' : 'en';
+    i18n.changeLanguage(newLanguage);
+  };
+  
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.greeting}>Hey!</Text>
+          <Text style={styles.greeting}>{t('greeting')}</Text>
           <Text style={styles.username}>Mohammed kacim</Text>
         </View>
-        <Image 
-          source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }} 
-          style={styles.profileImage} 
-        />
+        <View style={styles.headerRight}>
+          <TouchableOpacity style={styles.languageButton} onPress={toggleLanguage}>
+            <Text style={styles.languageText}>{i18n.language.toUpperCase()}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onLogout}>
+            <Image 
+              source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }} 
+              style={styles.profileImage} 
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Statistics Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Statistics</Text>
+          <Text style={styles.sectionTitle}>{t('statistics')}</Text>
           
           {/* Time Filter Dropdown */}
           <View>
@@ -73,7 +95,7 @@ const HomeScreen = () => {
           <View style={styles.statisticRow}>
             <View style={styles.statisticColumnLeft}>
               <StatisticCard 
-                title="Total Revenue" 
+                title={t('totalRevenue')} 
                 value="1000,00 MAD"
                 hasAlert={false}
                 showCurrency={true}
@@ -81,7 +103,7 @@ const HomeScreen = () => {
             </View>
             <View style={styles.statisticColumnRight}>
               <StatisticCard 
-                title="Total Sold" 
+                title={t('totalSold')} 
                 value="160" 
                 hasAlert={false} 
               />
@@ -91,14 +113,14 @@ const HomeScreen = () => {
           <View style={styles.statisticRow}>
             <View style={styles.statisticColumnLeft}>
               <StatisticCard 
-                title="Non Resolved Alert" 
+                title={t('nonResolvedAlert')} 
                 value="9" 
                 hasAlert={true} 
               />
             </View>
             <View style={styles.statisticColumnRight}>
               <StatisticCard 
-                title="Total Consumation" 
+                title={t('totalConsumation')} 
                 value="78" 
                 hasAlert={false} 
               />
@@ -110,16 +132,16 @@ const HomeScreen = () => {
       {/* Services Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Services</Text>
+          <Text style={styles.sectionTitle}>{t('services')}</Text>
           <TouchableOpacity>
-            <Text style={styles.viewAll}>View All</Text>
+            <Text style={styles.viewAll}>{t('viewAll')}</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.servicesContainer}>
-          <CarteService iconType="meal" label="Meal Serving" />
-          <CarteService iconType="clean" label="Cleaning" />
-          <CarteService iconType="table" label="Table Serving" />
+          <CarteService iconType="meal" label={t('mealServing')} />
+          <CarteService iconType="clean" label={t('cleaning')} />
+          <CarteService iconType="table" label={t('tableServing')} />
         </View>
       </View>
     </ScrollView>
@@ -138,6 +160,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 24,
     marginTop: 40,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  languageButton: {
+    backgroundColor: '#2691A3',
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginRight: 10,
+  },
+  languageText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 12,
   },
   greeting: {
     fontSize: 24,

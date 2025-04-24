@@ -2,22 +2,48 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import HomeScreen from '../screens/Home';
 import LaunchScreen from '../screens/LaunchScreen';
+import LoginScreen from '../screens/LoginScreen';
 import StartScreen from '../screens/StartScreen';
+import TestHome from '../screens/TestHome';
 
 export type RootStackParamList = {
-    Start: undefined;
-    Launch: undefined;
-    Home: undefined;
+  Start: undefined;
+  Launch: undefined;
+  Login: undefined;
+  Home: undefined;
+  TestHome: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-export function AppNavigator() {
+type Props = {
+  isLoggedIn: boolean;
+  onLogin: () => void;
+  onLogout: () => void;
+};
+
+export function AppNavigator({ isLoggedIn, onLogin, onLogout }: Props) {
     return (
-        <Stack.Navigator initialRouteName="Start" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Start" component={StartScreen} />
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Start">
+        {/* StartScreen toujours affiché en premier */}
+        <Stack.Screen name="Start">
+          {(props) => <StartScreen {...props} isLoggedIn={isLoggedIn} />}
+        </Stack.Screen>
+  
+        {isLoggedIn ? (
+          // ─── Utilisateur déjà authentifié → Start → Home ──────────────
+          <Stack.Screen name="Home">
+            {(props) => <HomeScreen {...props} onLogout={onLogout} />}
+          </Stack.Screen>
+        ) : (
+          // ─── Utilisateur non-authentifié → Start → Launch → Login ────────
+          <>
             <Stack.Screen name="Launch" component={LaunchScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-        </Stack.Navigator>
+            <Stack.Screen name="Login">
+              {(props) => <LoginScreen {...props} onLogin={onLogin} />}
+            </Stack.Screen>
+          </>
+        )}
+      </Stack.Navigator>
     );
-}
+  }

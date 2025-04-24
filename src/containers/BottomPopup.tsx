@@ -1,15 +1,41 @@
 import { Ionicons } from '@expo/vector-icons'; // pour icône
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from 'react';
+import * as SecureStore from 'expo-secure-store';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import EyeSVG from '../assets/eye.svg'; // chemin vers ton fichier SVG
 import { RootStackParamList } from "../navigation/AppNavigator";
+
 
 const BottomPopup = () => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    const handleGetStarted = () => {
-        navigation.navigate('Home');
+    useFocusEffect(
+        React.useCallback(() => {
+            checkAuthStatus();
+        }, [])
+    );
+
+
+    const checkAuthStatus = async () => {
+        try {
+            const token = await SecureStore.getItemAsync('access_token');
+            setIsAuthenticated(!!token);
+        } catch (error) {
+            console.error('Error checking auth status:', error);
+            setIsAuthenticated(false);
+        }
+    };
+
+    const handleGetStarted = async () => {
+        // First refresh authentication status
+        await checkAuthStatus();
+        
+        // Go directly to Login screen when not authenticated
+        // This breaks the loop of Start -> Launch -> Start
+        navigation.navigate('Login');
     };
 
     return (
@@ -27,7 +53,10 @@ const BottomPopup = () => {
                 </Text>
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={handleGetStarted}>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={handleGetStarted}
+            >
                 <Text style={styles.buttonText}>Get Started  &gt;</Text>
             </TouchableOpacity>
         </View>
@@ -73,7 +102,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         borderRadius: 30,
         alignItems: 'center',
-       // marginTop: 20,
+        // marginTop: 20,
     },
     buttonText: {
         color: '#fff',
