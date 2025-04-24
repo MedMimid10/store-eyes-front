@@ -1,9 +1,17 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // pour icône
-import EyeSVG from '../assets/eye.svg'; // chemin vers ton fichier SVG
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from 'react';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { RootStackParamList } from "../navigation/AppNavigator";
 
 const BottomPopup = () => {
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+    const handleGetStarted = () => {
+        navigation.navigate('Home');
+    };
+
     return (
         <View style={styles.popupContainer}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -19,7 +27,7 @@ const BottomPopup = () => {
                 </Text>
             </View>
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleGetStarted}>
                 <Text style={styles.buttonText}>Get Started  &gt;</Text>
             </TouchableOpacity>
         </View>

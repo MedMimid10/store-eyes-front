@@ -1,33 +1,52 @@
+import { Feather } from '@expo/vector-icons';
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons'; // icône de cloche et flèche
+import { StyleSheet, Text, View } from 'react-native';
+import AlertIcon from '../assets/icons/alert-icon.svg';
 
 interface StatisticCardProps {
     title: string;
     value: string | number;
     hasAlert: boolean;
+    showCurrency?: boolean;
 }
 
-const StatisticCard: React.FC<StatisticCardProps> = ({ title, value, hasAlert }) => {
+const StatisticCard: React.FC<StatisticCardProps> = ({ title, value, hasAlert, showCurrency = false }) => {
+    // Split value if it contains currency
+    let mainValue = value;
+    let currencyValue = '';
+    
+    if (showCurrency && typeof value === 'string') {
+        const parts = value.split(' ');
+        if (parts.length > 1) {
+            mainValue = parts[0];
+            currencyValue = parts[1];
+        }
+    }
+    
     return (
         <View style={styles.card}>
             {/* TOP */}
             <View style={styles.topRow}>
                 <Text style={styles.title}>{title}</Text>
-                <Feather name="chevron-right" size={20} color="gray" />
+                <Feather name="chevron-right" size={16} color="gray" />
             </View>
 
             {/* MIDDLE */}
-            <Text style={styles.value}>{value}</Text>
+            <View style={styles.valueContainer}>
+                <Text style={styles.value}>{mainValue}</Text>
+                {showCurrency && <Text style={styles.currency}>{currencyValue}</Text>}
+                
+                {/* Alert icon for Non Resolved Alert */}
+                {title === "Non Resolved Alert" && hasAlert && (
+                    <View style={styles.alertIconContainer}>
+                        <AlertIcon width={16} height={16} />
+                    </View>
+                )}
+            </View>
 
-            {/* BOTTOM */}
+            {/* BOTTOM - Keep for spacing */}
             <View style={styles.bottomRow}>
                 <View style={{ flex: 1 }} />
-                <Feather
-                    name="bell"
-                    size={24}
-                    color={hasAlert ? 'red' : 'green'}
-                />
             </View>
         </View>
     );
@@ -44,6 +63,7 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 3,
         marginBottom: 16,
+        height: 120, // Increase height
     },
     topRow: {
         flexDirection: 'row',
@@ -52,17 +72,39 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'gray',
-        fontSize: 14,
+        fontSize: 12,
+        fontFamily: 'Raleway-Medium',
+    },
+    valueContainer: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        marginVertical: 12,
+        justifyContent: 'space-between',
     },
     value: {
-        fontSize: 28,
+        fontSize: 20,
         fontWeight: 'bold',
-        marginVertical: 8,
         color: '#000',
+        fontFamily: 'Raleway-Bold',
+    },
+    currency: {
+        fontSize: 12,
+        color: 'gray',
+        marginBottom: 4,
+        fontFamily: 'Raleway-Medium',
     },
     bottomRow: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
+        flex: 1,
+    },
+    alertIconContainer: {
+        backgroundColor: '#AB1C1C1A',
+        width: 28,
+        height: 28,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 
