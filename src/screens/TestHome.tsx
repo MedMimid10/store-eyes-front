@@ -3,13 +3,18 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'rea
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
 
 
 type TestHomeProps = {
     onLogout: () => void;
 };
-
 const TestHome = ({ onLogout }: TestHomeProps) => {
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
     return (
         <LinearGradient
             colors={['#4c669f', '#3b5998', '#192f6a']}
@@ -56,6 +61,12 @@ const TestHome = ({ onLogout }: TestHomeProps) => {
                     <Text style={styles.cardTitle}>Inventory</Text>
                     <Text style={styles.cardText}>Manage your products</Text>
                 </View>
+
+                <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Cleaning')}>
+                    <Text style={styles.cardTitle}>Cleaning</Text>
+                    <Text style={styles.cardText}>Track recent cleaning activity</Text>
+                </TouchableOpacity>
+
             </ScrollView>
         </LinearGradient>
     );

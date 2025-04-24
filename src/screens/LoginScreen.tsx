@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import GoogleIcon from '../assets/icons8-google.svg';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import { login } from '../service/KeycloakService';
 import { Ionicons } from '@expo/vector-icons';
 import LogoEyes from '../assets/Logo_Store_Eyes.svg';
 
-export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
+interface LoginScreenProps {
+    onLogin: () => void;
+}
+
+export default function LoginScreen({ onLogin }: LoginScreenProps) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -16,8 +21,13 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
             await login(email, password);
             onLogin();
         } catch (e: any) {
-            Alert.alert('Échec de la connexion', e.message);
+            Alert.alert('Login Failed', e.message);
         }
+    };
+
+    const handleGoogleAuth = () => {
+        // TODO: Implement Google authentication logic
+        console.log('Google authentication');
     };
 
     return (
@@ -26,8 +36,26 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
             style={styles.gradient}
         >
             <View style={styles.container}>
-                <LogoEyes width={100} height={100} style={styles.logo} />
-                <Text style={styles.title}>Connexion</Text>
+                <View style={styles.logoContainer}>
+                    <LogoEyes width={100} height={100} />
+                    <Text style={styles.accessText}>Access my account</Text>
+                </View>
+
+                <Text style={styles.connectText}>Connect with</Text>
+                <Button
+                    title="Google"
+                    onPress={handleGoogleAuth}
+                    style={styles.googleButton}
+                    icon={<GoogleIcon width={24} height={24} />}
+                />
+
+                <View style={styles.dividerContainer}>
+                    <View style={styles.divider} />
+                    <Text style={styles.orText}>or</Text>
+                    <View style={styles.divider} />
+                </View>
+
+                <Text style={styles.subtitle}>Please enter your credentials</Text>
 
                 <Input
                     placeholder="Email"
@@ -38,7 +66,7 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
                 />
 
                 <Input
-                    placeholder="Mot de passe"
+                    placeholder="Password"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
@@ -47,16 +75,16 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
                 />
 
                 <Button
-                    title="Se connecter"
+                    title="Login"
                     onPress={handleLogin}
                     style={styles.button}
                 />
 
                 <Text style={styles.link}>
-                    Mot de passe oublié ? <Text style={styles.linkText}>Réinitialiser</Text>
+                    Forgot password? <Text style={styles.linkText}>Reset</Text>
                 </Text>
                 <Text style={styles.link}>
-                    Pas de compte ? <Text style={styles.linkText}>Créer un compte</Text>
+                    Need an account? <Text style={styles.linkText}>Register</Text>
                 </Text>
             </View>
         </LinearGradient>
@@ -73,14 +101,52 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 24,
     },
-    logo: {
+    logoContainer: {
+        alignItems: 'center',
         marginBottom: 20,
     },
-    title: {
-        fontSize: 28,
+    accessText: {
+        fontSize: 24,
         fontWeight: 'bold',
         color: '#2691A3',
-        marginBottom: 30,
+        marginTop: 10,
+    },
+    connectText: {
+        fontSize: 16,
+        color: '#2691A3',
+        marginBottom: 10,
+    },
+    googleButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20,
+        width: '100%',
+        maxWidth: 300,
+        borderWidth: 1,
+        borderColor: '#2691A3',
+        backgroundColor: '#2691A344',
+        borderRadius: 25,
+        paddingVertical: 12,
+    },
+    dividerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 20,
+    },
+    divider: {
+        flex: 1,
+        height: 1,
+        backgroundColor: '#ddd',
+    },
+    orText: {
+        marginHorizontal: 10,
+        color: '#2691A3',
+    },
+    subtitle: {
+        fontSize: 16,
+        color: '#2691A3',
+        marginBottom: 20,
     },
     input: {
         width: '100%',
