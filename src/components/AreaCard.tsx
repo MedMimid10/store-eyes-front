@@ -88,7 +88,8 @@ const styles = StyleSheet.create({
     minHeight: 140,    // taille minimale, la carte s’agrandit si besoin
     borderRadius: 16,
     backgroundColor: '#fff',
-    padding: 16,
+    padding: 8,
+    paddingHorizontal: 20,
     position: 'relative',
     overflow: 'hidden',
     alignSelf: 'center',
@@ -97,10 +98,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
    // alignItems: 'center',
     justifyContent: 'flex-start', // <- force l’alignement gauche
-    marginBottom: 20,
+    marginBottom: 10,
   },
   label: {
-         marginBottom: 4,           // ← petit écart entre label et valeur
+       marginBottom:3,           // ← petit écart entre label et valeur
        fontFamily: 'Raleway',
         fontSize: 12,
         fontWeight: '400',
@@ -150,9 +151,9 @@ const styles = StyleSheet.create({
   },
   sideIcon: {
     position: 'absolute',
-    right: 16,
-    top: '50%',
-    transform: [{ translateY: -30 }], // pour centrer verticalement l'icône
+    right: 40,
+    top: '65%',
+    transform: [{ translateY: -40 }], // pour centrer verticalement l'icône
   },
 });
 

@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 12,
-        paddingHorizontal: 16,
+       // paddingHorizontal: 1,
     },
     header: {
         fontFamily: 'Raleway',

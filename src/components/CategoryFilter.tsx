@@ -49,14 +49,15 @@ const CategoryFilter = ({
 const styles = StyleSheet.create({
   tabsContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    justifyContent: 'space-between',
   },
   tab: {
     paddingVertical: 6,
     paddingHorizontal: 22,
     borderRadius: 12,
-    marginRight: 20,
+   // marginRight: 20,
     backgroundColor: '#fff',
+    justifyContent: 'space-between',
   },
   selectedTab: {
     backgroundColor: '#2691A3',

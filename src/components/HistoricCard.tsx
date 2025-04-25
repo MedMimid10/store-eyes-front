@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         marginVertical: 8,
         marginBottom: 12,    // si vertical
+        marginTop :20,
     },
    /* leftIconWrapper: {
         width: 62,
