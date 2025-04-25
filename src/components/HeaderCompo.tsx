@@ -29,9 +29,10 @@ const HeaderCompo: React.FC<HeaderCompoProps> = ({ title, subtitle }) => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginTop: 36,
-        paddingHorizontal: 20,
+        marginTop: 16,
         alignItems: 'flex-start',
+        backgroundColor: '#F8F8F8',
+
     },
     backButton: {
         marginRight: 10,

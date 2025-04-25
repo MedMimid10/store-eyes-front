@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
-import { AppNavigator } from './src/navigation/AppNavigator';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
+import './src/i18n';
+import { AppNavigator } from './src/navigation/AppNavigator';
 
 export default function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);

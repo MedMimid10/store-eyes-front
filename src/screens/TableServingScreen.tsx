@@ -3,33 +3,38 @@ import { ScrollView, StyleSheet } from 'react-native';
 import HeaderCompo from '../components/HeaderCompo';
 import AreaCard, { DetailItem } from '../components/AreaCard';
 import CleaningIcon from '../assets/alert-green.svg';
-import HistoricCleaningContainer from '../containers/HistoricCleaningContainer';
+import HistoricTableContainer from '../containers/HistoricTableContainer';
 
 
-const CleaningScreen = () => {
+const TableServingScreen = () => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <HeaderCompo
-                title="Cleaning"
-                subtitle="Track Recent Cleaning Activity"
+                title="Table Serving"
+                subtitle="Track Recent Table Served"
             />
 
-            {/* 1er cas : Recent Activity */}
+            {/* 2eme cas : Recent Activity */}
             <AreaCard
                 header="Recent Activity"
                 details={[
-                    { value: 'Toilet Cleaning', isTitle: true },
-                    { label: 'Last time', value: 'Today at 8:00 AM' },
+                    { label: 'Type', value: 'Non served table' },
+                    { label: 'Detected time', value: 'Today at 8:00 AM' },
                     {
-                        label: 'By',
+                        label: 'Assigned to',
                         value: 'Fatima Larak',
                         image: require('../assets/fatima.png'),
                     },
                 ]}
                 sideIcon={<CleaningIcon />}
+                buttonLabel="Make Action"
+                onButtonPress={() => {
+                    // ton action ici
+                    console.log('Button pressed!');
+                }}
             />
 
-            <HistoricCleaningContainer />
+            <HistoricTableContainer />
 
         </ScrollView>
     );
@@ -43,4 +48,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CleaningScreen;
+export default TableServingScreen;

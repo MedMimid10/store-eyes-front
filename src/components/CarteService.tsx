@@ -1,26 +1,44 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons'; // Tu peux aussi utiliser FontAwesome ou autre si tu veux
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import CleanIcon from '../assets/icons/clean-icon.svg';
+import MealServingIcon from '../assets/icons/meal-serving-icon.svg';
+import TableServingIcon from '../assets/icons/table-serving-icon.svg';
 
 interface CarteServiceProps {
-    iconName: keyof typeof Feather.glyphMap;
+    iconType: 'meal' | 'clean' | 'table';
     label: string;
-}
-
-const CarteService: React.FC<CarteServiceProps> = ({ iconName, label }) => {
+    onPress?: () => void; // propriété optionnelle
+  }
+  
+const CarteService: React.FC<CarteServiceProps> = ({ iconType, label, onPress }) => {
+    const renderIcon = () => {
+        switch (iconType) {
+            case 'meal':
+                return <MealServingIcon width={36} height={37} />;
+            case 'clean':
+                return <CleanIcon width={36} height={37} />;
+            case 'table':
+                return <TableServingIcon width={33} height={33} />;
+            default:
+                return <MealServingIcon width={36} height={37} />;
+        }
+    };
+    
     return (
-        <View style={styles.card}>
-            <View style={styles.content}>
-                <Feather name={iconName} size={32} color="#2691A3" />
-                <Text style={styles.label}>{label}</Text>
+        <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+            <View style={styles.card}>
+                <View style={styles.content}>
+                    {renderIcon()}
+                    <Text style={styles.label}>{label}</Text>
+                </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
 const styles = StyleSheet.create({
     card: {
-        width: 104,
+        width: 110,
         height: 125,
         backgroundColor: '#fff',
         borderRadius: 16,
@@ -30,19 +48,21 @@ const styles = StyleSheet.create({
         paddingLeft: 19,
         justifyContent: 'center',
         alignItems: 'center',
+        marginBottom: 12,
     },
     content: {
-        width: 53,
-        height: 76,
+        width: 65,
+        height: 85,
         justifyContent: 'space-between',
         alignItems: 'center',
-        gap: 8, // fonctionne avec React Native >= 0.71
+        gap: 8,
     },
     label: {
         color: '#2691A3',
         fontSize: 14,
         fontWeight: '500',
         textAlign: 'center',
+        fontFamily: 'Raleway-Medium',
     },
 });
 

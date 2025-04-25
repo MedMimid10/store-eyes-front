@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // pour icône
-import EyeSVG from '../assets/eye.svg'; // chemin vers ton fichier SVG
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../navigation/AppNavigator";
 import * as SecureStore from 'expo-secure-store';
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import EyeSVG from '../assets/eye.svg'; // chemin vers ton fichier SVG
+import { RootStackParamList } from "../navigation/AppNavigator";
 
 
 const BottomPopup = () => {
@@ -30,12 +29,13 @@ const BottomPopup = () => {
         }
     };
 
-    const handleGetStarted = () => {
-        if (isAuthenticated) {
-            navigation.navigate('TestHome');
-        } else {
-            navigation.navigate('Login');
-        }
+    const handleGetStarted = async () => {
+        // First refresh authentication status
+        await checkAuthStatus();
+        
+        // Go directly to Login screen when not authenticated
+        // This breaks the loop of Start -> Launch -> Start
+        navigation.navigate('Login');
     };
 
     return (

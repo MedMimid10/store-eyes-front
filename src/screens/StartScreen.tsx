@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../navigation/AppNavigator";
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect } from 'react';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import Logo from '../assets/img18.svg';
+import { RootStackParamList } from "../navigation/AppNavigator";
 
 type Props = {
   isLoggedIn: boolean;
@@ -16,7 +16,7 @@ export default function StartScreen({ isLoggedIn }: Props) {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isLoggedIn) {
-        navigation.replace('TestHome'); // 🔁 Redirection directe si connecté
+        navigation.replace('Home'); // 🔁 Redirection directe si connecté
       } else {
         navigation.replace('Launch');   // ➡️ Sinon vers Launch
       }
