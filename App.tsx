@@ -8,11 +8,39 @@ import { AppNavigator } from './src/navigation/AppNavigator';
 export default function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
-    // Au démarrage, on voit si on a déjà un token
+    // Au démarrage, on voit si on a déjà un token valide
     useEffect(() => {
         (async () => {
-            const token = await SecureStore.getItemAsync('access_token');
-            setIsLoggedIn(!!token);
+            try {
+                // Retrieve token and expiry time
+                const token = await SecureStore.getItemAsync('access_token');
+                const tokenExpiryStr = await SecureStore.getItemAsync('token_expiry');
+                
+                // Check if token exists and is not expired
+                if (token && tokenExpiryStr) {
+                    const tokenExpiry = parseInt(tokenExpiryStr, 10);
+                    const now = Date.now();
+                    
+                    // If token exists and is not expired, user is logged in
+                    // Otherwise, user needs to log in again
+                    if (now < tokenExpiry) {
+                        setIsLoggedIn(true);
+                    } else {
+                        // Clear expired tokens
+                        await Promise.all([
+                            SecureStore.deleteItemAsync('access_token'),
+                            SecureStore.deleteItemAsync('refresh_token'),
+                            SecureStore.deleteItemAsync('token_expiry'),
+                        ]);
+                        setIsLoggedIn(false);
+                    }
+                } else {
+                    setIsLoggedIn(false);
+                }
+            } catch (error) {
+                console.error('Error checking authentication:', error);
+                setIsLoggedIn(false);
+            }
         })();
     }, []);
 

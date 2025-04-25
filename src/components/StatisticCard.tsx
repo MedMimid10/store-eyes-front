@@ -33,11 +33,13 @@ const StatisticCard: React.FC<StatisticCardProps> = ({ title, value, hasAlert, s
 
             {/* MIDDLE */}
             <View style={styles.valueContainer}>
-                <Text style={styles.value}>{mainValue}</Text>
-                {showCurrency && <Text style={styles.currency}>{currencyValue}</Text>}
+                <View style={styles.valueRow}>
+                    <Text style={styles.value}>{mainValue}</Text>
+                    {showCurrency && <Text style={styles.currency}>{currencyValue}</Text>}
+                </View>
                 
-                {/* Alert icon for Non Resolved Alert */}
-                {title === "Non Resolved Alert" && hasAlert && (
+                {/* Alert icon for Non-resolved Alert */}
+                {hasAlert && (
                     <View style={styles.alertIconContainer}>
                         <AlertIcon width={16} height={16} />
                     </View>
@@ -77,20 +79,25 @@ const styles = StyleSheet.create({
     },
     valueContainer: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         marginVertical: 12,
         justifyContent: 'space-between',
+    },
+    valueRow: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
     },
     value: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#000',
+        color: '#2691A3',
         fontFamily: 'Raleway-Bold',
     },
     currency: {
         fontSize: 12,
-        color: 'gray',
-        marginBottom: 4,
+        color: '#2691A3',
+        marginLeft: 2,
+        marginBottom: 2,
         fontFamily: 'Raleway-Medium',
     },
     bottomRow: {

@@ -27,9 +27,20 @@ export async function login(username: string, password: string) {
 }
 
 export async function logout() {
-    await Promise.all([
-        SecureStore.deleteItemAsync('access_token'),
-        SecureStore.deleteItemAsync('refresh_token'),
-        SecureStore.deleteItemAsync('token_expiry'),
-    ]);
+    try {
+        // Clear all authentication-related data
+        await Promise.all([
+            SecureStore.deleteItemAsync('access_token'),
+            SecureStore.deleteItemAsync('refresh_token'),
+            SecureStore.deleteItemAsync('token_expiry'),
+        ]);
+        
+        // Add any additional cleanup needed here
+        console.log('User successfully logged out');
+        return true;
+    } catch (error) {
+        console.error('Error during logout:', error);
+        // Still return true to ensure UI shows logged out state
+        return true;
+    }
 }
