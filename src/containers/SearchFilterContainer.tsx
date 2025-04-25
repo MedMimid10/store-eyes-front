@@ -43,7 +43,6 @@ const SearchFilterContainer = ({
 const styles = StyleSheet.create({
   container: {
     borderRadius: 10,
-    marginHorizontal: 0,
     marginVertical: 10,
   },
 });

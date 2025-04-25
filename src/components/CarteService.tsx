@@ -25,10 +25,10 @@ const CarteService = ({ iconType, label }: Props) => {
         navigation.navigate('MealServing');
         break;
       case 'clean':
-        // To be implemented
+        navigation.navigate('Cleaning');
         break;
       case 'table':
-        // To be implemented
+        // navigation.navigate('TableServing');
         break;
     }
   };

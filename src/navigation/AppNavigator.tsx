@@ -1,5 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+import AlertScreen from '../screens/AlertScreen';
+import CleaningScreen from "../screens/CleaningScreen";
 import HomeScreen from '../screens/Home';
 import LaunchScreen from '../screens/LaunchScreen';
 import LoginScreen from '../screens/LoginScreen';
@@ -14,6 +16,9 @@ export type RootStackParamList = {
   Home: undefined;
   TestHome: undefined;
   MealServing: undefined;
+  Cleaning: undefined;
+  // TableServing: undefined;
+  Alert: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -39,6 +44,8 @@ export function AppNavigator({ isLoggedIn, onLogin, onLogout }: Props) {
               {(props) => <HomeScreen {...props} onLogout={onLogout} />}
             </Stack.Screen>
             <Stack.Screen name="MealServing" component={MealServingScreen} />
+            <Stack.Screen name="Alert" component={AlertScreen} />
+            <Stack.Screen name="Cleaning" component={CleaningScreen} />
           </>
         ) : (
           // ─── Utilisateur non-authentifié → Start → Launch → Login ────────
@@ -49,6 +56,8 @@ export function AppNavigator({ isLoggedIn, onLogin, onLogout }: Props) {
             </Stack.Screen>
           </>
         )}
+        
+        {/* <Stack.Screen name="TableServing" component={TableServingScreen} /> */}
       </Stack.Navigator>
     );
   }

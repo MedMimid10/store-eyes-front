@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AlertIcon from '../assets/icons/alert-icon.svg';
 
 interface StatisticCardProps {
@@ -8,9 +8,11 @@ interface StatisticCardProps {
     value: string | number;
     hasAlert: boolean;
     showCurrency?: boolean;
+    onPress?: () => void;
+    
 }
 
-const StatisticCard: React.FC<StatisticCardProps> = ({ title, value, hasAlert, showCurrency = false }) => {
+const StatisticCard: React.FC<StatisticCardProps> = ({ title, value, hasAlert, showCurrency = false, onPress }) => {
     // Split value if it contains currency
     let mainValue = value;
     let currencyValue = '';
@@ -23,8 +25,15 @@ const StatisticCard: React.FC<StatisticCardProps> = ({ title, value, hasAlert, s
         }
     }
     
+    // Wrap the card in TouchableOpacity if onPress is provided
+    const CardContainer = onPress ? TouchableOpacity : View;
+    
     return (
-        <View style={styles.card}>
+        <CardContainer 
+            style={styles.card} 
+            onPress={onPress}
+            activeOpacity={0.7}
+        >
             {/* TOP */}
             <View style={styles.topRow}>
                 <Text style={styles.title}>{title}</Text>
@@ -50,7 +59,7 @@ const StatisticCard: React.FC<StatisticCardProps> = ({ title, value, hasAlert, s
             <View style={styles.bottomRow}>
                 <View style={{ flex: 1 }} />
             </View>
-        </View>
+        </CardContainer>
     );
 };
 

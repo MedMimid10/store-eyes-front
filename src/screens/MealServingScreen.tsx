@@ -4,6 +4,7 @@ import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import TitleHeader from '../components/TitleHeader';
 import MealListContainer from '../containers/MealListContainer';
 import SearchFilterContainer from '../containers/SearchFilterContainer';
+import HeaderCompo from '../components/HeaderCompo';
 
 // Enhanced Sample data with category and time
 const MEAL_DATA = [
@@ -110,10 +111,12 @@ const MealServingScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TitleHeader 
-        title={t('mealServing')} 
-        subtitle={t('trackFoodServingInsights')} 
-      />
+      <View style={styles.headerContainer}>
+        <HeaderCompo
+          title={t('mealServing')} 
+          subtitle={t('trackFoodServingInsights')} 
+        />
+      </View>
       
       <SearchFilterContainer 
         categories={CATEGORIES.map(category => t(category.toLowerCase()))}
@@ -159,6 +162,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F7F9',
+  },
+  headerContainer: {
+    paddingHorizontal:16
   },
   summaryContainer: {
     flexDirection: 'row',

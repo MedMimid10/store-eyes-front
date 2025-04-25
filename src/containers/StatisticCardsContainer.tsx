@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import StatisticCard from '../components/StatisticCard';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
 
 // Define time filter keys (consistent across languages)
 const TIME_FILTER_KEYS = ['today', 'lastweek', 'lastmonth'];
@@ -12,6 +16,7 @@ type StatisticCardsContainerProps = {
 };
 
 const StatisticCardsContainer = ({ onTimeFilterChange }: StatisticCardsContainerProps) => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();  
   const { t, i18n } = useTranslation();
   
   // Track selected filter by its key, not by the translated text
@@ -99,7 +104,8 @@ const StatisticCardsContainer = ({ onTimeFilterChange }: StatisticCardsContainer
             <StatisticCard 
               title={t('nonResolvedAlert')} 
               value="9" 
-              hasAlert={true} 
+              hasAlert={true}
+              onPress={() => navigation.navigate('Alert')}
             />
           </View>
           <View style={styles.statisticColumnRight}>
