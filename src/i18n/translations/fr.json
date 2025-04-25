@@ -14,6 +14,7 @@
   "cleaning": "Nettoyage",
   "tableServing": "Service de table",
   "trackFoodServingInsights": "Suivi des statistiques de service alimentaire",
+  "trackTableServingInsights": "Suivi des statistiques de service de table",
   "pricePerUnit": "Prix/Unité",
   "soldUnit": "Unités vendues",
   "totalPrice": "Prix total",
@@ -22,5 +23,13 @@
   "all": "Tous",
   "food": "Nourriture",
   "drink": "Boisson",
-  "mealListing": "Liste des repas"
+  "mealListing": "Liste des repas",
+  "historic": "Historique",
+  "totalTableServing": "Total des tables servies",
+  "tableServedLate": "Tables servies en retard",
+  "tableClearedLate": "Tables débarrassées en retard",
+  "served": "Servies",
+  "cleared": "Débarrassées",
+  "lastWeek": "Semaine dernière",
+  "lastMonth": "Mois dernier"
 } 

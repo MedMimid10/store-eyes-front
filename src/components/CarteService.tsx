@@ -28,7 +28,7 @@ const CarteService = ({ iconType, label }: Props) => {
         navigation.navigate('Cleaning');
         break;
       case 'table':
-        // navigation.navigate('TableServing');
+        navigation.navigate('TableServing');
         break;
     }
   };

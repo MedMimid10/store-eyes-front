@@ -14,6 +14,7 @@
   "cleaning": "Cleaning",
   "tableServing": "Table Serving",
   "trackFoodServingInsights": "Track Food Serving Insights",
+  "trackTableServingInsights": "Track Table Serving Insights",
   "pricePerUnit": "Price/Unit",
   "soldUnit": "Sold Unit",
   "totalPrice": "Total Price",
@@ -22,5 +23,13 @@
   "all": "All",
   "food": "Food",
   "drink": "Drink",
-  "mealListing": "Meal Listing"
+  "mealListing": "Meal Listing",
+  "historic": "Historic",
+  "totalTableServing": "Total Table Serving",
+  "tableServedLate": "Tables Served Late",
+  "tableClearedLate": "Tables Cleared Late",
+  "served": "Served",
+  "cleared": "Cleared",
+  "lastWeek": "Last Week",
+  "lastMonth": "Last Month"
 } 

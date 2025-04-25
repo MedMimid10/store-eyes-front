@@ -7,6 +7,7 @@ import LaunchScreen from '../screens/LaunchScreen';
 import LoginScreen from '../screens/LoginScreen';
 import MealServingScreen from '../screens/MealServingScreen';
 import StartScreen from '../screens/StartScreen';
+import TableServingScreen from '../screens/TableServingScreen';
 import TestHome from '../screens/TestHome';
 
 export type RootStackParamList = {
@@ -17,7 +18,7 @@ export type RootStackParamList = {
   TestHome: undefined;
   MealServing: undefined;
   Cleaning: undefined;
-  // TableServing: undefined;
+  TableServing: undefined;
   Alert: undefined;
 };
 
@@ -46,6 +47,7 @@ export function AppNavigator({ isLoggedIn, onLogin, onLogout }: Props) {
             <Stack.Screen name="MealServing" component={MealServingScreen} />
             <Stack.Screen name="Alert" component={AlertScreen} />
             <Stack.Screen name="Cleaning" component={CleaningScreen} />
+            <Stack.Screen name="TableServing" component={TableServingScreen} />
           </>
         ) : (
           // ─── Utilisateur non-authentifié → Start → Launch → Login ────────
