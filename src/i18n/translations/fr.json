@@ -31,5 +31,73 @@
   "served": "Servies",
   "cleared": "Débarrassées",
   "lastWeek": "Semaine dernière",
-  "lastMonth": "Mois dernier"
-} 
+  "lastMonth": "Mois dernier",
+  "recentActivity": "Activité récente",
+  "by": "Par",
+  "lastTime": "Dernière fois",
+  "todayAt": "Aujourd'hui à {{time}}",
+  "toiletCleaning": "Nettoyage des toilettes",
+  "trackRecentCleaningActivity": "Suivre l'activité de nettoyage récente",
+  "categories": {
+    "cleaningTable": "Table de nettoyage",
+    "servingTable": "Service de table"
+  },
+  "alerts": {
+    "toiletCleaningDelayed": "Nettoyage des toilettes retardé",
+    "tableServedLate": "Table #{{number}} servie en retard",
+    "nonServedTable": "Table #{{number}} non servie",
+    "brokenWindowRestroom": "Fenêtre cassée dans les toilettes",
+    "tableClearedLate": "Table #{{number}} débarrassée en retard",
+    "monthlyMaintenanceDelayed": "Entretien mensuel retardé",
+    "kitchenAreaNotCleaned": "Zone de cuisine non nettoyée",
+    "tableMissedOrder": "Commande manquée à la table #{{number}}"
+  },
+  "alert": {
+    "title": "Alerte",
+    "subtitle": "Suivre le service de table récent",
+    "recentActivity": "Activité récente",
+    "type": "Type",
+    "typeValue": "Table non servie",
+    "detectedTime": "Heure détectée",
+    "todayAt": "Aujourd'hui à {{time}}",
+    "assignedTo": "Assigné à",
+    "makeAction": "Agir"
+  },
+  "cleaningScreen": {
+    "title": "Nettoyage",
+    "subtitle": "Suivre l'activité de nettoyage récente",
+    "recentActivity": "Activité récente",
+    "toiletCleaning": "Nettoyage des toilettes",
+    "lastTime": "Dernière fois",
+    "todayAt": "Aujourd'hui à {{time}}",
+    "by": "Par",
+    "mainEntranceCleaning": "Nettoyage de l'entrée principale",
+    "weeklyInspection": "Inspection hebdomadaire",
+    "meetingRoomCleanup": "Nettoyage de la salle de réunion",
+    "parkingAreaCleaning": "Nettoyage du parking",
+    "deepCleaningSchedule": "Programme de nettoyage en profondeur",
+    "plumbingIssues": "Problèmes de plomberie",
+    "quarterlyInspection": "Inspection trimestrielle"
+  },
+  "login": {
+    "accessAccount": "Accéder à mon compte",
+    "connectWith": "Se connecter avec",
+    "google": "Google",
+    "or": "ou",
+    "enterCredentials": "Veuillez saisir vos identifiants",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Mot de passe",
+    "login": "Se connecter",
+    "forgotPassword": "Mot de passe oublié ?",
+    "reset": "Réinitialiser",
+    "needAccount": "Besoin d'un compte ?",
+    "register": "S'inscrire",
+    "failedTitle": "Échec de la connexion"
+  },
+  "welcomeScreen": {
+    "slogan": "Des yeux à chaque coin.",
+    "title": "Bienvenue sur Store Eyes",
+    "description": "Votre assistant intelligent pour le suivi des tables en temps réel, la surveillance des clients et les alertes instantanées - le tout depuis un tableau de bord puissant.",
+    "getStarted": "Commencer  >"
+  }
+}

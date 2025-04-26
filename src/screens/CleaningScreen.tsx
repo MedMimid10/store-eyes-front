@@ -1,32 +1,35 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import HeaderCompo from '../components/HeaderCompo';
-import AreaCard, { DetailItem } from '../components/AreaCard';
+import { useTranslation } from 'react-i18next';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import CleaningIcon from '../assets/alert-green.svg';
+import AreaCard, { DetailItem } from '../components/AreaCard';
+import HeaderCompo from '../components/HeaderCompo';
 import HistoricCleaningContainer from '../containers/HistoricCleaningContainer';
 
 
 const CleaningScreen = () => {
+    const { t } = useTranslation();
+    
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <HeaderCompo
-                title="Cleaning"
-                subtitle="Track Recent Cleaning Activity"
+                title={t('cleaning')}
+                subtitle={t('trackRecentCleaningActivity')}
             />
 
-            {/* 1er cas : Recent Activity */}
+            {/* Recent Activity */}
             <AreaCard
-                header="Recent Activity"
+                header={t('recentActivity')}
                 details={[
-                    { value: 'Toilet Cleaning', isTitle: true },
-                    { label: 'Last time', value: 'Today at 8:00 AM' },
+                    { value: t('toiletCleaning'), isTitle: true },
+                    { label: t('lastTime'), value: t('todayAt', { time: '8:00 AM' }) },
                     {
-                        label: 'By',
+                        label: t('by'),
                         value: 'Fatima Larak',
                         image: require('../assets/fatima.png'),
                     },
                 ]}
-                sideIcon={<CleaningIcon />}
+                sideIcon={<View><CleaningIcon /></View>}
             />
 
             <HistoricCleaningContainer />

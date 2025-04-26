@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BackBtm from '../assets/backBt.svg'; // 👈 SVG importé
 
 const { width } = Dimensions.get('window');
@@ -16,7 +16,9 @@ const HeaderCompo: React.FC<HeaderCompoProps> = ({ title, subtitle }) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                <BackBtm width={40} height={40} /> {/* 👈 SVG au lieu de Ionicons */}
+                <View>
+                    <BackBtm width={40} height={40} />
+                </View>
             </TouchableOpacity>
             <View style={styles.textContainer}>
                 <Text style={styles.title}>{title}</Text>
@@ -29,7 +31,7 @@ const HeaderCompo: React.FC<HeaderCompoProps> = ({ title, subtitle }) => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginTop: 16,
+        marginVertical: 10,
         alignItems: 'flex-start',
         backgroundColor: '#F8F8F8',
 

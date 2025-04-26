@@ -36,11 +36,11 @@ const CarteService = ({ iconType, label }: Props) => {
   const renderIcon = () => {
     switch (iconType) {
       case 'meal':
-        return <MealServingIcon width={36} height={37} />;
+        return <View><MealServingIcon width={36} height={37} /></View>;
       case 'clean':
-        return <CleanIcon width={36} height={37} />;
+        return <View><CleanIcon width={36} height={37} /></View>;
       case 'table':
-        return <TableServingIcon width={33} height={33} />;
+        return <View><TableServingIcon width={33} height={33} /></View>;
       default:
         return null;
     }

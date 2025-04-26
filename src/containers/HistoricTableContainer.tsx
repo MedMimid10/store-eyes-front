@@ -1,131 +1,197 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import HistoricCard from '../components/HistoricCard';
-import AlertGrn from '../assets/AlrtGrn.svg';
-import AlertRed from '../assets/AlrtRed.svg';
+// src/containers/HistoricTableContainer.tsx
 import { Feather } from '@expo/vector-icons';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native';
 
-const sampleData = [
+import CategoryFilter from '../components/CategoryFilter';
+import HistoricCard from '../components/HistoricCard';
+
+import AlertRed from '../assets/AlrtRed.svg';
+
+type AlertItem = {
+    title: string;
+    by: string;
+    time: string;
+    image: any;
+    AlertIcon: any;
+    category: 'Cleaning Table' | 'Serving Table';
+    isAlert: boolean;
+};
+
+// Sample data - only red alerts (all are problems that need attention)
+const ALERT_DATA: AlertItem[] = [
+    // Today's alerts
     {
-        title: 'Toilet Cleaning',
+        title: 'Toilet Cleaning Delayed',
         by: 'Fatima Larak',
         time: 'Today at 8:00 AM',
         image: require('../assets/fatima.png'),
-        AlertIcon: AlertGrn,
+        AlertIcon: AlertRed,
+        category: 'Cleaning Table',
+        isAlert: true
     },
     {
-        title: 'Broken Window',
+        title: 'Table #5 Served Late',
+        by: 'Ahmed Raji',
+        time: 'Today at 12:30 PM',
+        image: require('../assets/fatima.png'),
+        AlertIcon: AlertRed,
+        category: 'Serving Table',
+        isAlert: true
+    },
+    
+    // Last Week's alerts (excluding today)
+    {
+        title: 'Non Served Table #12',
         by: 'Ali Benomar',
         time: 'Yesterday at 4:00 PM',
         image: require('../assets/fatima.png'),
         AlertIcon: AlertRed,
+        category: 'Serving Table',
+        isAlert: true
     },
     {
-        title: 'Weekly Inspection',
-        by: 'Rachid Amrani',
-        time: '6 days ago',
+        title: 'Broken Window in Restroom',
+        by: 'Karim Salhi',
+        time: '3 days ago',
         image: require('../assets/fatima.png'),
-        AlertIcon: AlertGrn,
+        AlertIcon: AlertRed,
+        category: 'Cleaning Table',
+        isAlert: true
     },
     {
-        title: 'Monthly Maintenance',
+        title: 'Table #8 Cleared Late',
+        by: 'Leila Douiri',
+        time: '5 days ago',
+        image: require('../assets/fatima.png'),
+        AlertIcon: AlertRed,
+        category: 'Serving Table',
+        isAlert: true
+    },
+    
+    // Last Month's alerts (excluding last week)
+    {
+        title: 'Monthly Maintenance Delayed',
         by: 'Mounia Salah',
         time: '3 weeks ago',
         image: require('../assets/fatima.png'),
         AlertIcon: AlertRed,
+        category: 'Cleaning Table',
+        isAlert: true
     },
+    {
+        title: 'Kitchen Area Not Cleaned',
+        by: 'Omar Sabri',
+        time: '2 weeks ago',
+        image: require('../assets/fatima.png'),
+        AlertIcon: AlertRed,
+        category: 'Cleaning Table',
+        isAlert: true
+    },
+    {
+        title: 'Table #15 Order Missed',
+        by: 'Nadia Chaoui',
+        time: '4 weeks ago',
+        image: require('../assets/fatima.png'),
+        AlertIcon: AlertRed,
+        category: 'Serving Table',
+        isAlert: true
+    }
 ];
+
+const CATEGORY_OPTIONS = ['All', 'Cleaning Table', 'Serving Table'];
 
 const HistoricTableContainer: React.FC = () => {
     const { t } = useTranslation();
 
-    const TimeFilterOptions = [
-        { key: 'all', label: t('all') },
-        { key: 'today', label: t('today') },
-        { key: 'lastWeek', label: t('lastWeek') },
+    // Time filter options - no 'all' option
+    const TIME_FILTER_OPTIONS = [
+        { key: 'today',     label: t('today') },
+        { key: 'lastWeek',  label: t('lastWeek') },
         { key: 'lastMonth', label: t('lastMonth') },
     ];
 
-    const [selectedTimeFilter, setSelectedTimeFilter] = useState(TimeFilterOptions[0].key);
-    const [showTimeFilterDropdown, setShowTimeFilterDropdown] = useState(false);
+    const [selectedTime,     setSelectedTime]     = useState<string>(TIME_FILTER_OPTIONS[0].key);
+    const [showTimeDropdown, setShowTimeDropdown] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState(CATEGORY_OPTIONS[0]);
 
-    const toggleTimeFilterDropdown = () => {
-        setShowTimeFilterDropdown(!showTimeFilterDropdown);
+    const toggleTimeDropdown = () => setShowTimeDropdown(!showTimeDropdown);
+    const chooseTime = (key: string) => {
+        setSelectedTime(key);
+        setShowTimeDropdown(false);
     };
 
-    const selectTimeFilter = (filterKey: string) => {
-        setSelectedTimeFilter(filterKey);
-        setShowTimeFilterDropdown(false);
-    };
-
-    const filterDataByTime = () => {
-        const selectedKey = selectedTimeFilter;
-
-        if (selectedKey === 'all') return sampleData;
-
-        if (selectedKey === 'today') {
-            return sampleData.filter(item =>
-                item.time.toLowerCase().includes('today')
-            );
+    // Filtrage combiné : catégorie + temps (cumulative time filtering)
+    const filteredData = ALERT_DATA.filter(item => {
+        // Catégorie
+        if (selectedCategory !== 'All' && item.category !== selectedCategory) {
+            return false;
         }
-
-        if (selectedKey === 'lastWeek') {
-            return sampleData.filter(item => {
-                const time = item.time.toLowerCase();
-                if (time.includes('yesterday')) return true;
-                if (time.includes('days ago')) {
-                    const days = parseInt(time.split(' ')[0], 10);
-                    return !isNaN(days) && days <= 7;
-                }
-                return false;
-            });
+        
+        // Temps - cumulative filtering
+        const txt = item.time.toLowerCase();
+        
+        if (selectedTime === 'today') {
+            return txt.includes('today');
         }
-
-        if (selectedKey === 'lastMonth') {
-            return sampleData.filter(item => {
-                const time = item.time.toLowerCase();
-                if (time.includes('weeks ago')) {
-                    const weeks = parseInt(time.split(' ')[0], 10);
-                    return !isNaN(weeks) && weeks <= 4;
-                }
-                return false;
-            });
+        
+        if (selectedTime === 'lastWeek') {
+            return txt.includes('today') || 
+                   txt.includes('yesterday') || 
+                   (txt.match(/(\d+)\s+days\s+ago/) !== null && 
+                    Number(txt.match(/(\d+)\s+days\s+ago/)![1]) <= 7);
         }
+        
+        if (selectedTime === 'lastMonth') {
+            return txt.includes('today') || 
+                   txt.includes('yesterday') || 
+                   txt.match(/(\d+)\s+days\s+ago/) !== null || 
+                   (txt.match(/(\d+)\s+weeks\s+ago/) !== null && 
+                    Number(txt.match(/(\d+)\s+weeks\s+ago/)![1]) <= 4);
+        }
+        
+        return true;
+    });
 
-        return sampleData;
-    };
 
     return (
         <View style={styles.wrapper}>
+            {/* Entête + filtre temps */}
             <View style={styles.headerRow}>
-                <Text style={styles.header}>Historic</Text>
+                <Text style={styles.header}>{t('historic')}</Text>
                 <View style={{ position: 'relative' }}>
                     <TouchableOpacity
                         style={styles.timeFilterButton}
-                        onPress={toggleTimeFilterDropdown}
+                        onPress={toggleTimeDropdown}
                     >
                         <Text style={styles.timeFilter}>
-                            {TimeFilterOptions.find(opt => opt.key === selectedTimeFilter)?.label}
+                            {TIME_FILTER_OPTIONS.find(o => o.key === selectedTime)?.label}
                         </Text>
                         <Feather name="chevron-down" size={16} color="#666" />
                     </TouchableOpacity>
 
-                    {showTimeFilterDropdown && (
+                    {showTimeDropdown && (
                         <View style={styles.timeFilterDropdown}>
-                            {TimeFilterOptions.map(filter => (
+                            {TIME_FILTER_OPTIONS.map(opt => (
                                 <TouchableOpacity
-                                    key={filter.key}
+                                    key={opt.key}
                                     style={styles.timeFilterOption}
-                                    onPress={() => selectTimeFilter(filter.key)}
+                                    onPress={() => chooseTime(opt.key)}
                                 >
                                     <Text
                                         style={[
                                             styles.timeFilterOptionText,
-                                            filter.key === selectedTimeFilter && styles.selectedTimeFilterOption,
+                                            opt.key === selectedTime && styles.selectedTimeFilterOption
                                         ]}
                                     >
-                                        {filter.label}
+                                        {opt.label}
                                     </Text>
                                 </TouchableOpacity>
                             ))}
@@ -134,11 +200,19 @@ const HistoricTableContainer: React.FC = () => {
                 </View>
             </View>
 
+            {/* Filtre de catégorie */}
+            <CategoryFilter
+                categories={CATEGORY_OPTIONS}
+                initialCategory={selectedCategory}
+                onCategoryChange={setSelectedCategory}
+            />
+
+            {/* Liste des cartes */}
             <ScrollView
-                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.list}
             >
-                {filterDataByTime().map((item, idx) => (
+                {filteredData.map((item, idx) => (
                     <HistoricCard
                         key={idx}
                         title={item.title}
@@ -163,8 +237,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 12,
-        paddingHorizontal: 16,
+        marginBottom: 15,
     },
     header: {
         fontFamily: 'Raleway',
@@ -173,6 +246,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     list: {
+        paddingTop: 10,
         paddingBottom: 20,
     },
     timeFilterButton: {
@@ -187,12 +261,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 2,
         elevation: 2,
-    },
-    timeFilter: {
-        fontSize: 12,
-        color: '#666',
-        fontFamily: 'Raleway',
-        marginRight: 6,
     },
     timeFilterDropdown: {
         position: 'absolute',
@@ -220,6 +288,12 @@ const styles = StyleSheet.create({
     selectedTimeFilterOption: {
         fontWeight: 'bold',
         color: '#2691A3',
+    },
+    timeFilter: {
+        fontSize: 12,
+        color: '#666',
+        fontFamily: 'Raleway',
+        marginRight: 6,
     },
 });
 

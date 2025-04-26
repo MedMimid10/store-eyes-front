@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import GoogleIcon from '../assets/icons8-google.svg';
+import LogoEyes from '../assets/Logo_Store_Eyes.svg';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import { login } from '../service/KeycloakService';
-import { Ionicons } from '@expo/vector-icons';
-import LogoEyes from '../assets/Logo_Store_Eyes.svg';
 
 interface LoginScreenProps {
     onLogin: () => void;
 }
 
 export default function LoginScreen({ onLogin }: LoginScreenProps) {
+    const { t } = useTranslation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -21,7 +23,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             await login(email, password);
             onLogin();
         } catch (e: any) {
-            Alert.alert('Login Failed', e.message);
+            Alert.alert(t('login.failedTitle'), e.message);
         }
     };
 
@@ -38,12 +40,12 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             <View style={styles.container}>
                 <View style={styles.logoContainer}>
                     <LogoEyes width={100} height={100} />
-                    <Text style={styles.accessText}>Access my account</Text>
+                    <Text style={styles.accessText}>{t('login.accessAccount')}</Text>
                 </View>
 
-                <Text style={styles.connectText}>Connect with</Text>
+                <Text style={styles.connectText}>{t('login.connectWith')}</Text>
                 <Button
-                    title="Google"
+                    title={t('login.google')}
                     onPress={handleGoogleAuth}
                     style={styles.googleButton}
                     icon={<GoogleIcon width={24} height={24} />}
@@ -51,14 +53,14 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
 
                 <View style={styles.dividerContainer}>
                     <View style={styles.divider} />
-                    <Text style={styles.orText}>or</Text>
+                    <Text style={styles.orText}>{t('login.or')}</Text>
                     <View style={styles.divider} />
                 </View>
 
-                <Text style={styles.subtitle}>Please enter your credentials</Text>
+                <Text style={styles.subtitle}>{t('login.enterCredentials')}</Text>
 
                 <Input
-                    placeholder="Email"
+                    placeholder={t('login.emailPlaceholder')}
                     value={email}
                     onChangeText={setEmail}
                     icon={<Ionicons name="mail-outline" size={20} color="#2691A3" />}
@@ -66,7 +68,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
                 />
 
                 <Input
-                    placeholder="Password"
+                    placeholder={t('login.passwordPlaceholder')}
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
@@ -75,16 +77,16 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
                 />
 
                 <Button
-                    title="Login"
+                    title={t('login.login')}
                     onPress={handleLogin}
                     style={styles.button}
                 />
 
                 <Text style={styles.link}>
-                    Forgot password? <Text style={styles.linkText}>Reset</Text>
+                    {t('login.forgotPassword')} <Text style={styles.linkText}>{t('login.reset')}</Text>
                 </Text>
                 <Text style={styles.link}>
-                    Need an account? <Text style={styles.linkText}>Register</Text>
+                    {t('login.needAccount')} <Text style={styles.linkText}>{t('login.register')}</Text>
                 </Text>
             </View>
         </LinearGradient>
@@ -137,7 +139,7 @@ const styles = StyleSheet.create({
     divider: {
         flex: 1,
         height: 1,
-        backgroundColor: '#ddd',
+        backgroundColor: '#fff',
     },
     orText: {
         marginHorizontal: 10,

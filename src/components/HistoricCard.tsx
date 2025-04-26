@@ -1,12 +1,13 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-    View,
-    Text,
+    Image,
     StyleSheet,
+    Text,
     TouchableOpacity,
+    View,
 } from 'react-native';
-import MoreIcon from '../assets/MoreIcon.svg';  // icône 3-points ou autre
-import { Image } from 'react-native';
+import MoreIcon from '../assets/MoreIcon.svg'; // icône 3-points ou autre
 
 
 export interface HistoricCardProps {
@@ -27,47 +28,52 @@ const HistoricCard: React.FC<HistoricCardProps> = ({
                                                        image, // ✅ AJOUT ICI aussi !
                                                        onPress,
                                                        AlertIcon,
-                                                   }) => (
+                                                   }) => {
+    const { t } = useTranslation();
+    
+    return (
+        <TouchableOpacity
+            style={styles.card}
+            onPress={onPress}
+            activeOpacity={0.7}
+        >
+            {/* 1) Cercle avec SVG alerte */}
+            <View style={styles.leftIconWrapper}>
+                {AlertIcon && <View><AlertIcon width={62} height={62} /></View>}
+                {image && (
+                    <Image
+                        source={image}
+                        style={styles.smallImage}
+                        resizeMode="cover"
+                    />
+                )}
+            </View>
 
-    <TouchableOpacity
-        style={styles.card}
-        onPress={onPress}
-        activeOpacity={0.7}
-    >
-        {/* 1) Cercle avec SVG alerte */}
-        <View style={styles.leftIconWrapper}>
-            {AlertIcon && <AlertIcon width={62} height={62} />}
-            {image && (
-                <Image
-                    source={image}
-                    style={styles.smallImage}
-                    resizeMode="cover"
-                />
-            )}
-        </View>
 
-
-        {/* 2) Texte */}
-        <View style={styles.content}>
-            <Text style={styles.title}>{title}</Text>
-            <View style={styles.metaRow}>
-                <View style={styles.metaBlock}>
-                    <Text style={styles.metaLabel}>By</Text>
-                    <Text style={styles.metaText}>{by}</Text>
-                </View>
-                <View style={styles.metaBlock}>
-                    <Text style={styles.metaLabel}>At</Text>
-                    <Text style={styles.metaText}>{time}</Text>
+            {/* 2) Texte */}
+            <View style={styles.content}>
+                <Text style={styles.title}>{title}</Text>
+                <View style={styles.metaRow}>
+                    <View style={styles.metaBlock}>
+                        <Text style={styles.metaLabel}>{t('by')}</Text>
+                        <Text style={styles.metaText}>{by}</Text>
+                    </View>
+                    <View style={styles.metaBlock}>
+                        <Text style={styles.metaLabel}>{t('lastTime')}</Text>
+                        <Text style={styles.metaText}>{time}</Text>
+                    </View>
                 </View>
             </View>
-        </View>
 
-        {/* 3) Icône tout à droite */}
-        <View style={styles.rightIconWrapper}>
-            <MoreIcon width={16} height={16} />
-        </View>
-    </TouchableOpacity>
-);
+            {/* 3) Icône tout à droite */}
+            <View style={styles.rightIconWrapper}>
+                <View>
+                    <MoreIcon width={16} height={16} />
+                </View>
+            </View>
+        </TouchableOpacity>
+    );
+};
 
 const styles = StyleSheet.create({
     card: {
@@ -80,8 +86,7 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#fff',
         borderRadius: 12,
-        marginVertical: 8,
-        marginBottom: 12,    // si vertical
+        marginTop :10,
     },
    /* leftIconWrapper: {
         width: 62,
@@ -99,7 +104,7 @@ const styles = StyleSheet.create({
         width: 62,
         height: 62,
         borderRadius: 31,
-        backgroundColor: '#EBF9F1', // vert clair pâle comme dans l’image
+        backgroundColor: '#EBF9F1', // vert clair pâle comme dans l'image
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative', // nécessaire pour positionner l'image par-dessus

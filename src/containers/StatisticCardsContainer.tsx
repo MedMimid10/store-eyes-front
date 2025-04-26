@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    paddingVertical: 8,
+    paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 16,
     minWidth: 120,
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   timeFilter: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#666',
     fontFamily: 'Raleway-Medium',
     marginRight: 8,

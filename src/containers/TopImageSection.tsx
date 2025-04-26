@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, Image, StyleSheet, Dimensions } from 'react-native';
-import Onboard_Screen from '../assets/img17.svg'
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
+import Onboard_Screen from '../assets/img17.svg';
 
 const TopImageSection = () => {
     return (
         <View style={styles.container}>
-            <Onboard_Screen  style={styles.image} />
+            <View style={styles.image}>
+                <Onboard_Screen/>
+            </View>
         </View>
     );
 };
@@ -20,8 +22,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: width,
-        height: '70%',
-
+        height: height,
     },
 });
 

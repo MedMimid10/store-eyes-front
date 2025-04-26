@@ -50,7 +50,9 @@ const StatisticCard: React.FC<StatisticCardProps> = ({ title, value, hasAlert, s
                 {/* Alert icon for Non-resolved Alert */}
                 {hasAlert && (
                     <View style={styles.alertIconContainer}>
-                        <AlertIcon width={16} height={16} />
+                        <View>
+                            <AlertIcon width={16} height={16} />
+                        </View>
                     </View>
                 )}
             </View>

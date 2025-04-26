@@ -30,17 +30,23 @@ const SearchFilterContainer = ({
       <TimeFilterDropdown 
         options={timeOptions} 
         onSelect={onTimeChange} 
-        label="mealListing" 
+        label={t('mealListing')} 
       />
-      <CategoryFilter 
-        categories={categories} 
-        onCategoryChange={onCategoryChange} 
-      />
+      <View style={styles.categoryContainer}>
+
+        <CategoryFilter 
+          categories={categories} 
+          onCategoryChange={onCategoryChange} 
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  categoryContainer: {
+    paddingHorizontal: 16
+  },
   container: {
     borderRadius: 10,
     marginVertical: 10,

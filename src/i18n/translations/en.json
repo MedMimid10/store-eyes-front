@@ -1,5 +1,5 @@
 {
-  "greeting": "Hi,",
+ "greeting": "Hi,",
   "statistics": "Statistics",
   "today": "Today",
   "lastweek": "Last Week",
@@ -23,7 +23,7 @@
   "all": "All",
   "food": "Food",
   "drink": "Drink",
-  "mealListing": "Meal Listing",
+  "mealListing": "Meal Listing ",
   "historic": "Historic",
   "totalTableServing": "Total Table Serving",
   "tableServedLate": "Tables Served Late",
@@ -31,5 +31,73 @@
   "served": "Served",
   "cleared": "Cleared",
   "lastWeek": "Last Week",
-  "lastMonth": "Last Month"
-} 
+  "lastMonth": "Last Month",
+  "recentActivity": "Recent Activity",
+  "by": "By",
+  "lastTime": "Last Time",
+  "todayAt": "Today at {{time}}",
+  "toiletCleaning": "Toilet Cleaning",
+  "trackRecentCleaningActivity": "Track Recent Cleaning Activity",
+  "categories": {
+    "cleaningTable": "Cleaning Table",
+    "servingTable": "Serving Table"
+  },
+  "alerts": {
+    "toiletCleaningDelayed": "Toilet Cleaning Delayed",
+    "tableServedLate": "Table #{{number}} Served Late",
+    "nonServedTable": "Non Served Table #{{number}}",
+    "brokenWindowRestroom": "Broken Window in Restroom",
+    "tableClearedLate": "Table #{{number}} Cleared Late",
+    "monthlyMaintenanceDelayed": "Monthly Maintenance Delayed",
+    "kitchenAreaNotCleaned": "Kitchen Area Not Cleaned",
+    "tableMissedOrder": "Table #{{number}} Order Missed"
+  },
+  "alert": {
+    "title": "Alert",
+    "subtitle": "Track Recent Table Served",
+    "recentActivity": "Recent Activity",
+    "type": "Type",
+    "typeValue": "Non served table",
+    "detectedTime": "Detected time",
+    "todayAt": "Today at {{time}}",
+    "assignedTo": "Assigned to",
+    "makeAction": "Make Action"
+  },
+  "cleaningScreen": {
+    "title": "Cleaning",
+    "subtitle": "Track Recent Cleaning Activity",
+    "recentActivity": "Recent Activity",
+    "toiletCleaning": "Toilet Cleaning",
+    "lastTime": "Last time",
+    "todayAt": "Today at {{time}}",
+    "by": "By",
+    "mainEntranceCleaning": "Main Entrance Cleaning",
+    "weeklyInspection": "Weekly Inspection",
+    "meetingRoomCleanup": "Meeting Room Cleanup",
+    "parkingAreaCleaning": "Parking Area Cleaning",
+    "deepCleaningSchedule": "Deep Cleaning Schedule",
+    "plumbingIssues": "Plumbing Issues",
+    "quarterlyInspection": "Quarterly Inspection"
+  },
+  "login": {
+    "accessAccount": "Access my account",
+    "connectWith": "Connect with",
+    "google": "Google",
+    "or": "or",
+    "enterCredentials": "Please enter your credentials",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password",
+    "login": "Login",
+    "forgotPassword": "Forgot password?",
+    "reset": "Reset",
+    "needAccount": "Need an account?",
+    "register": "Register",
+    "failedTitle": "Login Failed"
+  },
+  "welcomeScreen": {
+    "slogan": "Eyes on Every Corner.",
+    "title": "Welcome to Store Eyes",
+    "description": "Your smart assistant for real-time table tracking, customer monitoring, and instant alerts - all from one powerful dashboard.",
+    "getStarted": "Get Started  >"
+  }
+}

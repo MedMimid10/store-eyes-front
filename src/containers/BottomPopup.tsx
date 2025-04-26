@@ -3,12 +3,14 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as SecureStore from 'expo-secure-store';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import EyeSVG from '../assets/eye.svg'; // chemin vers ton fichier SVG
 import { RootStackParamList } from "../navigation/AppNavigator";
 
 
 const BottomPopup = () => {
+    const { t } = useTranslation();
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -42,14 +44,14 @@ const BottomPopup = () => {
         <View style={styles.popupContainer}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                 <Ionicons name="eye" size={20} color="gray" />
-                <Text style={styles.subtitle}>Eyes on Every Corner.</Text>
+                <Text style={styles.subtitle}>{t('welcomeScreen.slogan', { defaultValue: 'Eyes on Every Corner.' })}</Text>
             </View>
 
-            <Text style={styles.title}>Welcome to Store Eyes</Text>
+            <Text style={styles.title}>{t('welcomeScreen.title', { defaultValue: 'Welcome to Store Eyes' })}</Text>
 
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
                 <Text style={styles.description}>
-                    Your smart assistant for real-time table tracking, customer monitoring, and instant alerts - all from one powerful dashboard.
+                    {t('welcomeScreen.description', { defaultValue: 'Your smart assistant for real-time table tracking, customer monitoring, and instant alerts - all from one powerful dashboard.' })}
                 </Text>
             </View>
 
@@ -57,7 +59,7 @@ const BottomPopup = () => {
                 style={styles.button}
                 onPress={handleGetStarted}
             >
-                <Text style={styles.buttonText}>Get Started  &gt;</Text>
+                <Text style={styles.buttonText}>{t('welcomeScreen.getStarted', { defaultValue: 'Get Started  >' })}</Text>
             </TouchableOpacity>
         </View>
     );

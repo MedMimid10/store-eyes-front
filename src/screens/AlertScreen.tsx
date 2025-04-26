@@ -1,51 +1,45 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import CleaningIcon from '../assets/alert-green.svg';
-import AreaCard, { DetailItem } from '../components/AreaCard';
+import AreaCard from '../components/AreaCard';
 import HeaderCompo from '../components/HeaderCompo';
 import HistoricTableContainer from '../containers/HistoricTableContainer';
-
+import '../i18n';
 
 const AlertScreen = () => {
-    return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <HeaderCompo
-                title="Alert"
-                subtitle="Track Recent Table Served"
-            />
+  const { t } = useTranslation();
 
-            {/* 2eme cas : Recent Activity */}
-            <AreaCard
-                header="Recent Activity"
-                details={[
-                    { label: 'Type', value: 'Non served table' },
-                    { label: 'Detected time', value: 'Today at 8:00 AM' },
-                    {
-                        label: 'Assigned to',
-                        value: 'Fatima Larak',
-                        image: require('../assets/fatima.png'),
-                    },
-                ]}
-                sideIcon={<CleaningIcon />}
-                buttonLabel="Make Action"
-                onButtonPress={() => {
-                    // ton action ici
-                    console.log('Button pressed!');
-                }}
-            />
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <HeaderCompo
+        title={t('alert.title')}
+        subtitle={t('alert.subtitle')}
+      />
 
-            <HistoricTableContainer />
+      <AreaCard
+        header={t('recentActivity')}
+        details={[
+          { label: t('alert.type'), value: t('alert.typeValue') },
+          { label: t('lastTime'), value: t('todayAt', { time: '8:00 AM' }) },
+          { label: t('by'), value: 'Fatima Larak', image: require('../assets/fatima.png') },
+        ]}
+        sideIcon={<View><CleaningIcon /></View>}
+        buttonLabel={t('alert.makeAction')}
+        onButtonPress={() => console.log('Button pressed!')}
+      />
 
-        </ScrollView>
-    );
+      <HistoricTableContainer />
+    </ScrollView>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingHorizontal: 20,
-        backgroundColor: '#F8F8F8',
-    },
+  container: {
+    flex: 1,
+    paddingHorizontal: 20,
+    backgroundColor: '#F8F8F8',
+  },
 });
 
 export default AlertScreen;

@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     categoryFilterContainer: {
-        marginBottom: 16,
+        marginBottom: 10,
     },
     list: {
         paddingBottom: 20,

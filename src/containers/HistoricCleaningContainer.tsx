@@ -1,47 +1,112 @@
+import { Feather } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import HistoricCard from '../components/HistoricCard';
+import { useTranslation } from 'react-i18next';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AlertGrn from '../assets/AlrtGrn.svg';
 import AlertRed from '../assets/AlrtRed.svg';
-import { Feather } from '@expo/vector-icons';
-import { useTranslation } from 'react-i18next';
+import HistoricCard from '../components/HistoricCard';
 
 const sampleData = [
+    // Today's data
     {
         title: 'Toilet Cleaning',
         by: 'Fatima Larak',
         time: 'Today at 8:00 AM',
         image: require('../assets/fatima.png'),
         AlertIcon: AlertGrn,
+        isAlert: false
     },
     {
-        title: 'Broken Window',
+        title: 'Toilet Cleaning',
+        by: 'Ahmed Tazi',
+        time: 'Today at 10:30 AM',
+        image: require('../assets/fatima.png'),
+        AlertIcon: AlertRed,
+        isAlert: true
+    },
+    {
+        title: 'Toilet Cleaning',
+        by: 'Sara Bakali',
+        time: 'Today at 2:15 PM',
+        image: require('../assets/fatima.png'),
+        AlertIcon: AlertGrn,
+        isAlert: false
+    },
+    
+    // Last Week's data (excluding today)
+    {
+        title: 'Toilet Cleaning',
         by: 'Ali Benomar',
         time: 'Yesterday at 4:00 PM',
         image: require('../assets/fatima.png'),
         AlertIcon: AlertRed,
+        isAlert: true
     },
     {
-        title: 'Weekly Inspection',
+        title: 'Toilet Cleaning',
         by: 'Rachid Amrani',
         time: '6 days ago',
         image: require('../assets/fatima.png'),
         AlertIcon: AlertGrn,
+        isAlert: false
     },
     {
-        title: 'Monthly Maintenance',
+        title: 'Toilet Cleaning',
+        by: 'Leila Sadiki',
+        time: '2 days ago',
+        image: require('../assets/fatima.png'),
+        AlertIcon: AlertGrn,
+        isAlert: false
+    },
+    {
+        title: 'Toilet Cleaning',
+        by: 'Omar Kadiri',
+        time: '4 days ago',
+        image: require('../assets/fatima.png'),
+        AlertIcon: AlertRed,
+        isAlert: true
+    },
+    
+    // Last Month's data (excluding last week)
+    {
+        title: 'Toilet Cleaning',
         by: 'Mounia Salah',
         time: '3 weeks ago',
         image: require('../assets/fatima.png'),
         AlertIcon: AlertRed,
+        isAlert: true
     },
+    {
+        title: 'Toilet Cleaning',
+        by: 'Karim Nasri',
+        time: '2 weeks ago',
+        image: require('../assets/fatima.png'),
+        AlertIcon: AlertGrn,
+        isAlert: false
+    },
+    {
+        title: 'Toilet Cleaning',
+        by: 'Hassan Mansouri',
+        time: '3 weeks ago',
+        image: require('../assets/fatima.png'),
+        AlertIcon: AlertRed,
+        isAlert: true
+    },
+    {
+        title: 'Toilet Cleaning',
+        by: 'Nadia Chaoui',
+        time: '4 weeks ago',
+        image: require('../assets/fatima.png'),
+        AlertIcon: AlertGrn,
+        isAlert: false
+    }
 ];
 
 const HistoricCleaningContainer: React.FC = () => {
     const { t } = useTranslation();
 
+    // Time filter options without "all"
     const TimeFilterOptions = [
-        { key: 'all', label: t('all') },
         { key: 'today', label: t('today') },
         { key: 'lastWeek', label: t('lastWeek') },
         { key: 'lastMonth', label: t('lastMonth') },
@@ -59,37 +124,30 @@ const HistoricCleaningContainer: React.FC = () => {
         setShowTimeFilterDropdown(false);
     };
 
+    // Filter data by time with cumulative filtering
     const filterDataByTime = () => {
-        const selectedKey = selectedTimeFilter;
-
-        if (selectedKey === 'all') return sampleData;
-
-        if (selectedKey === 'today') {
+        if (selectedTimeFilter === 'today') {
             return sampleData.filter(item =>
                 item.time.toLowerCase().includes('today')
             );
         }
 
-        if (selectedKey === 'lastWeek') {
+        if (selectedTimeFilter === 'lastWeek') {
             return sampleData.filter(item => {
                 const time = item.time.toLowerCase();
-                if (time.includes('yesterday')) return true;
-                if (time.includes('days ago')) {
-                    const days = parseInt(time.split(' ')[0], 10);
-                    return !isNaN(days) && days <= 7;
-                }
-                return false;
+                return time.includes('today') || 
+                       time.includes('yesterday') || 
+                       (time.includes('days ago') && parseInt(time.split(' ')[0], 10) <= 7);
             });
         }
 
-        if (selectedKey === 'lastMonth') {
+        if (selectedTimeFilter === 'lastMonth') {
             return sampleData.filter(item => {
                 const time = item.time.toLowerCase();
-                if (time.includes('weeks ago')) {
-                    const weeks = parseInt(time.split(' ')[0], 10);
-                    return !isNaN(weeks) && weeks <= 4;
-                }
-                return false;
+                return time.includes('today') || 
+                       time.includes('yesterday') || 
+                       time.includes('days ago') || 
+                       (time.includes('weeks ago') && parseInt(time.split(' ')[0], 10) <= 4);
             });
         }
 
@@ -99,7 +157,7 @@ const HistoricCleaningContainer: React.FC = () => {
     return (
         <View style={styles.wrapper}>
             <View style={styles.headerRow}>
-                <Text style={styles.header}>Historic</Text>
+                <Text style={styles.header}>{t('historic')}</Text>
                 <View style={{ position: 'relative' }}>
                     <TouchableOpacity
                         style={styles.timeFilterButton}
@@ -135,7 +193,7 @@ const HistoricCleaningContainer: React.FC = () => {
             </View>
 
             <ScrollView
-                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.list}
             >
                 {filterDataByTime().map((item, idx) => (
@@ -156,15 +214,14 @@ const HistoricCleaningContainer: React.FC = () => {
 const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
-        marginTop: 20,
+        marginVertical: 15,
         backgroundColor: '#F8F8F8',
     },
     headerRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 12,
-        paddingHorizontal: 16,
+        paddingBottom: 10,
     },
     header: {
         fontFamily: 'Raleway',
