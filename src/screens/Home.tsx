@@ -7,6 +7,7 @@ import ServiceCardsContainer from '../containers/ServiceCardsContainer';
 import StatisticCardsContainer from '../containers/StatisticCardsContainer';
 import '../i18n'; // Import i18n configuration
 import { logout } from '../service/KeycloakService';
+import {useSse} from "../sse/sse-context"
 
 interface HomeScreenProps {
   onLogout: () => void;
@@ -15,6 +16,8 @@ interface HomeScreenProps {
 const HomeScreen = ({ onLogout }: HomeScreenProps) => {
   const { t, i18n } = useTranslation();
   const navigation = useNavigation();
+
+  const { products } = useSse();
   
   // Verify authentication on mount
   useEffect(() => {

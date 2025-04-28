@@ -13,16 +13,30 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.msahtani.storeeyesfront",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d3e3270b-2814-451f-ac86-f2e8e64f1edf"
+      }
+    },
+    "owner": "msahtani",
+    "updates": {
+      "url": "https://u.expo.dev/d3e3270b-2814-451f-ac86-f2e8e64f1edf"
     }
   }
 }

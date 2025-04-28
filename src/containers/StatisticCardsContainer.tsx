@@ -6,6 +6,7 @@ import StatisticCard from '../components/StatisticCard';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { useSse } from '../sse/sse-context';
 
 
 // Define time filter keys (consistent across languages)
@@ -22,6 +23,9 @@ const StatisticCardsContainer = ({ onTimeFilterChange }: StatisticCardsContainer
   // Track selected filter by its key, not by the translated text
   const [selectedFilterKey, setSelectedFilterKey] = useState(TIME_FILTER_KEYS[0]);
   const [showTimeFilterDropdown, setShowTimeFilterDropdown] = useState(false);
+
+
+  const {products, totalCount} = useSse();
   
   // Update when language changes
   useEffect(() => {
@@ -103,7 +107,7 @@ const StatisticCardsContainer = ({ onTimeFilterChange }: StatisticCardsContainer
           <View style={styles.statisticColumnLeft}>
             <StatisticCard 
               title={t('nonResolvedAlert')} 
-              value="9" 
+              value="0"
               hasAlert={true}
               onPress={() => navigation.navigate('Alert')}
             />
@@ -111,7 +115,7 @@ const StatisticCardsContainer = ({ onTimeFilterChange }: StatisticCardsContainer
           <View style={styles.statisticColumnRight}>
             <StatisticCard 
               title={t('totalConsumation')} 
-              value="78" 
+              value={totalCount}
               hasAlert={false} 
             />
           </View>

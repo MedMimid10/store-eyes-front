@@ -7,63 +7,88 @@ import SearchFilterContainer from '../containers/SearchFilterContainer';
 import HeaderCompo from '../components/HeaderCompo';
 
 // Enhanced Sample data with category and time
-const MEAL_DATA = [
-  {
-    id: '1',
-    title: 'Salade Gusto',
-    image: 'https://cdn.pixabay.com/photo/2018/04/09/18/26/asparagus-3304997_1280.jpg',
-    pricePerUnit: 44.00,
-    soldUnits: 10,
-    totalPrice: 440.00,
-    category: 'Food',
-    time: 'Today'
-  },
-  {
-    id: '2',
-    title: 'Pizza Margherita',
-    image: 'https://cdn.pixabay.com/photo/2017/12/09/08/18/pizza-3007395_1280.jpg',
-    pricePerUnit: 60.00,
-    soldUnits: 8,
-    totalPrice: 480.00,
-    category: 'Food',
-    time: 'Today'
-  },
-  {
-    id: '3',
-    title: 'Café Latte',
-    image: 'https://cdn.pixabay.com/photo/2016/11/29/02/10/caffeine-1866758_1280.jpg',
-    pricePerUnit: 25.00,
-    soldUnits: 15,
-    totalPrice: 375.00,
-    category: 'Drink',
-    time: 'Today'
-  },
-  {
-    id: '4',
-    title: 'Fresh Orange Juice',
-    image: 'https://cdn.pixabay.com/photo/2017/01/20/14/59/orange-1995044_1280.jpg',
-    pricePerUnit: 30.00,
-    soldUnits: 12,
-    totalPrice: 360.00,
-    category: 'Drink',
-    time: 'Last Week'
-  },
-  {
-    id: '5',
-    title: 'Pasta Carbonara',
-    image: 'https://cdn.pixabay.com/photo/2020/01/31/07/26/pasta-4807317_1280.jpg',
-    pricePerUnit: 55.00,
-    soldUnits: 6,
-    totalPrice: 330.00,
-    category: 'Food',
-    time: 'Last Week'
-  },
-];
+
 
 const CATEGORIES = ['All', 'Food', 'Drink'];
 const TIME_OPTIONS = ['Today', 'Last Week', 'Last Month'];
 
 const MealServingScreen = () => {
+
+  const MEAL_DATA = [
+    {
+      id: '1',
+      title: 'Café Noir',
+      image: 'https://everestorganichome.com/image/cache/catalog/Coffee/benefits%20of%20black%20coffee-1263x660.jpeg',
+      pricePerUnit: 25.00,
+      soldUnits: 15,
+      totalPrice: 375.00,
+      category: 'Drink',
+      time: 'Today'
+    },
+  
+    {
+      id: '2',
+      title: 'Café Latte',
+      image: 'https://cdn.pixabay.com/photo/2016/11/29/02/10/caffeine-1866758_1280.jpg',
+      pricePerUnit: 44.00,
+      soldUnits: 10,
+      totalPrice: 440.00,
+      category: 'Drink',
+      time: 'Today'
+    },
+    {
+      id: '3',
+      title: 'Thé',
+      image: 'https://cdn.pixabay.com/photo/2016/11/29/02/10/caffeine-1866758_1280.jpg',
+      pricePerUnit: 44.00,
+      soldUnits: 10,
+      totalPrice: 440.00,
+      category: 'Drink',
+      time: 'Today'
+    },
+    {
+      id: '20',
+      title: 'Salade Gusto',
+      image: 'https://cdn.pixabay.com/photo/2018/04/09/18/26/asparagus-3304997_1280.jpg',
+      pricePerUnit: 44.00,
+      soldUnits: 10,
+      totalPrice: 440.00,
+      category: 'Food',
+      time: 'Last Week'
+    },
+    {
+      id: '30',
+      title: 'Pizza Margherita',
+      image: 'https://cdn.pixabay.com/photo/2017/12/09/08/18/pizza-3007395_1280.jpg',
+      pricePerUnit: 60.00,
+      soldUnits: 8,
+      totalPrice: 480.00,
+      category: 'Food',
+      time: 'Last Week'
+    },
+    
+    {
+      id: '40',
+      title: 'Fresh Orange Juice',
+      image: 'https://cdn.pixabay.com/photo/2017/01/20/14/59/orange-1995044_1280.jpg',
+      pricePerUnit: 30.00,
+      soldUnits: 12,
+      totalPrice: 360.00,
+      category: 'Drink',
+      time: 'Last Week'
+    },
+    {
+      id: '50',
+      title: 'Pasta Carbonara',
+      image: 'https://cdn.pixabay.com/photo/2020/01/31/07/26/pasta-4807317_1280.jpg',
+      pricePerUnit: 55.00,
+      soldUnits: 6,
+      totalPrice: 330.00,
+      category: 'Food',
+      time: 'Last Week'
+    },
+  ];
+
   const { t, i18n } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
@@ -100,8 +125,8 @@ const MealServingScreen = () => {
   });
 
   // Calculate summary statistics
-  const totalSoldUnits = filteredMeals.reduce((sum, meal) => sum + meal.soldUnits, 0);
-  const totalPrice = filteredMeals.reduce((sum, meal) => sum + meal.totalPrice, 0);
+  const totalSoldUnits = filteredMeals.reduce((sum, meal) => sum + (meal.soldUnits || 0), 0);
+  const totalPrice = filteredMeals.reduce((sum, meal) => sum + (meal.totalPrice || 0), 0);
 
   // For debugging
   useEffect(() => {
@@ -149,7 +174,7 @@ const MealServingScreen = () => {
         <View style={styles.summaryCard}>
           <Text style={styles.summaryLabel}>{t('totalRevenue')}</Text>
           <View style={styles.currencyRow}>
-            <Text style={styles.summaryValue}>{totalPrice.toFixed(2)}</Text>
+            <Text style={styles.summaryValue}>{totalPrice}</Text>
             <Text style={styles.currencyText}>MAD</Text>
           </View>
         </View>
