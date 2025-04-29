@@ -5,6 +5,7 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 import AlertGrn from '../assets/AlrtGrn.svg';
 import AlertRed from '../assets/AlrtRed.svg';
 import HistoricCard from '../components/HistoricCard';
+import TimeFilterDropdown from '../components/TimeFilterDropdown';
 
 const sampleData = [
     // Today's data
@@ -105,34 +106,28 @@ const sampleData = [
 const HistoricCleaningContainer: React.FC = () => {
     const { t } = useTranslation();
 
-    // Time filter options without "all"
-    const TimeFilterOptions = [
-        { key: 'today', label: t('today') },
-        { key: 'lastWeek', label: t('lastWeek') },
-        { key: 'lastMonth', label: t('lastMonth') },
+    // Time filter options as translated strings
+    const TIME_FILTER_OPTIONS = [
+        t('today'),
+        t('lastWeek'),
+        t('lastMonth')
     ];
 
-    const [selectedTimeFilter, setSelectedTimeFilter] = useState(TimeFilterOptions[0].key);
-    const [showTimeFilterDropdown, setShowTimeFilterDropdown] = useState(false);
+    const [selectedTimeFilter, setSelectedTimeFilter] = useState(TIME_FILTER_OPTIONS[0]);
 
-    const toggleTimeFilterDropdown = () => {
-        setShowTimeFilterDropdown(!showTimeFilterDropdown);
-    };
-
-    const selectTimeFilter = (filterKey: string) => {
-        setSelectedTimeFilter(filterKey);
-        setShowTimeFilterDropdown(false);
+    const handleTimeFilterChange = (time: string) => {
+        setSelectedTimeFilter(time);
     };
 
     // Filter data by time with cumulative filtering
     const filterDataByTime = () => {
-        if (selectedTimeFilter === 'today') {
+        if (selectedTimeFilter === t('today')) {
             return sampleData.filter(item =>
                 item.time.toLowerCase().includes('today')
             );
         }
 
-        if (selectedTimeFilter === 'lastWeek') {
+        if (selectedTimeFilter === t('lastWeek')) {
             return sampleData.filter(item => {
                 const time = item.time.toLowerCase();
                 return time.includes('today') || 
@@ -141,7 +136,7 @@ const HistoricCleaningContainer: React.FC = () => {
             });
         }
 
-        if (selectedTimeFilter === 'lastMonth') {
+        if (selectedTimeFilter === t('lastMonth')) {
             return sampleData.filter(item => {
                 const time = item.time.toLowerCase();
                 return time.includes('today') || 
@@ -158,43 +153,18 @@ const HistoricCleaningContainer: React.FC = () => {
         <View style={styles.wrapper}>
             <View style={styles.headerRow}>
                 <Text style={styles.header}>{t('historic')}</Text>
-                <View style={{ position: 'relative' }}>
-                    <TouchableOpacity
-                        style={styles.timeFilterButton}
-                        onPress={toggleTimeFilterDropdown}
-                    >
-                        <Text style={styles.timeFilter}>
-                            {TimeFilterOptions.find(opt => opt.key === selectedTimeFilter)?.label}
-                        </Text>
-                        <Feather name="chevron-down" size={16} color="#666" />
-                    </TouchableOpacity>
-
-                    {showTimeFilterDropdown && (
-                        <View style={styles.timeFilterDropdown}>
-                            {TimeFilterOptions.map(filter => (
-                                <TouchableOpacity
-                                    key={filter.key}
-                                    style={styles.timeFilterOption}
-                                    onPress={() => selectTimeFilter(filter.key)}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.timeFilterOptionText,
-                                            filter.key === selectedTimeFilter && styles.selectedTimeFilterOption,
-                                        ]}
-                                    >
-                                        {filter.label}
-                                    </Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    )}
-                </View>
+                <TimeFilterDropdown 
+                    options={TIME_FILTER_OPTIONS}
+                    onSelect={handleTimeFilterChange}
+                    initialOption={TIME_FILTER_OPTIONS[0]}
+                    label=""
+                />
             </View>
 
             <ScrollView
-                showsVerticalScrollIndicator={false}
+                style={styles.scrollView}
                 contentContainerStyle={styles.list}
+                showsVerticalScrollIndicator={false}
             >
                 {filterDataByTime().map((item, idx) => (
                     <HistoricCard
@@ -214,8 +184,7 @@ const HistoricCleaningContainer: React.FC = () => {
 const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
-        marginVertical: 15,
-        backgroundColor: '#F8F8F8',
+        marginTop: 12,
     },
     headerRow: {
         flexDirection: 'row',
@@ -229,8 +198,11 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         color: '#000',
     },
+    scrollView: {
+        flex: 1,
+    },
     list: {
-        paddingBottom: 20,
+        paddingBottom: 10,
     },
     timeFilterButton: {
         flexDirection: 'row',
@@ -269,10 +241,13 @@ const styles = StyleSheet.create({
     timeFilterOption: {
         paddingVertical: 6,
         paddingHorizontal: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
     },
     timeFilterOptionText: {
         fontSize: 12,
         color: '#333',
+        fontFamily: 'Raleway',
     },
     selectedTimeFilterOption: {
         fontWeight: 'bold',

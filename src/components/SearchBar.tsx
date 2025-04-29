@@ -33,7 +33,6 @@ const SearchBar = ({ placeholder, onSearch, onFilter }: SearchBarProps) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
     alignItems: 'center',
   },
   searchContainer: {

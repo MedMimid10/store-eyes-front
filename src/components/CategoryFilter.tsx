@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type CategoryFilterProps = {
   categories: string[];
@@ -41,40 +41,47 @@ const CategoryFilter = ({
   };
 
   return (
-    <View style={styles.tabsContainer}>
-      {categories.map((category) => (
-        <TouchableOpacity
-          key={category}
-          style={[
-            styles.tab,
-            selectedCategory === category && styles.selectedTab
-          ]}
-          onPress={() => handleCategorySelect(category)}
-        >
-          <Text style={[
-            styles.tabText,
-            selectedCategory === category && styles.selectedTabText
-          ]}>
-            {getCategoryTranslation(category)}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
+    <ScrollView 
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.scrollContainer}
+    >
+      <View style={styles.tabsContainer}>
+        {categories.map((category) => (
+          <TouchableOpacity
+            key={category}
+            style={[
+              styles.tab,
+              selectedCategory === category && styles.selectedTab
+            ]}
+            onPress={() => handleCategorySelect(category)}
+          >
+            <Text style={[
+              styles.tabText,
+              selectedCategory === category && styles.selectedTabText
+            ]}>
+              {getCategoryTranslation(category)}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+  },
   tabsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    marginBottom: 10
   },
   tab: {
     paddingVertical: 6,
     paddingHorizontal: 20,
     borderRadius: 12,
-   // marginRight: 20,
+    marginRight: 10,
     backgroundColor: '#fff',
-    justifyContent: 'space-between',
   },
   selectedTab: {
     backgroundColor: '#2691A3',

@@ -6,11 +6,11 @@ type MealCardProps = {
   title: string;
   image: string;
   pricePerUnit: number;
-  soldUnits: number;
-  totalPrice: number;
+  soldUnitsSystem: number;
+  soldUnitsCamera: number;
 };
 
-const MealCard = ({ title, image, pricePerUnit, soldUnits, totalPrice }: MealCardProps) => {
+const MealCard = ({ title, image, pricePerUnit, soldUnitsSystem, soldUnitsCamera }: MealCardProps) => {
   const { t } = useTranslation();
   // Use a fallback image if the provided URL doesn't load
   const fallbackImage = 'https://cdn.pixabay.com/photo/2018/04/09/18/26/asparagus-3304997_1280.jpg';
@@ -23,25 +23,28 @@ const MealCard = ({ title, image, pricePerUnit, soldUnits, totalPrice }: MealCar
         onError={(error) => console.log('Image error:', error.nativeEvent.error)}
       />
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{title}</Text>
         <View style={styles.detailsRow}>
           <View style={styles.detail}>
-            <Text style={styles.detailLabel}>{t('pricePerUnit')}</Text>
+            <Text style={styles.detailLabel} numberOfLines={1}>{t('pricePerUnit')}</Text>
             <View style={styles.currencyRow}>
               <Text style={styles.detailValue}>{pricePerUnit.toFixed(2)}</Text>
               <Text style={styles.currencyText}>MAD</Text>
             </View>
           </View>
           <View style={styles.detail}>
-            <Text style={styles.detailLabel}>{t('soldUnit')}</Text>
-            <Text style={styles.detailValue}>{soldUnits}</Text>
+            <Text style={styles.detailLabel} numberOfLines={1}>{t('systemUnits')}</Text>
+            <Text style={styles.detailValue}>{soldUnitsSystem}</Text>
           </View>
           <View style={styles.detail}>
-            <Text style={styles.detailLabel}>{t('totalPrice')}</Text>
-            <View style={styles.currencyRow}>
-              <Text style={styles.detailValue}>{totalPrice.toFixed(2)}</Text>
-              <Text style={styles.currencyText}>MAD</Text>
-            </View>
+            <Text style={styles.detailLabel} numberOfLines={1}>{t('cameraUnits')}</Text>
+            <Text style={[
+              styles.detailValue, 
+              soldUnitsCamera > soldUnitsSystem ? styles.higherValue : 
+              soldUnitsCamera < soldUnitsSystem ? styles.lowerValue : null
+            ]}>
+              {soldUnitsCamera}
+            </Text>
           </View>
         </View>
       </View>
@@ -54,9 +57,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'white',
     borderRadius: 10,
-    marginVertical: 8,
-    marginHorizontal: 20,
     padding: 10,
+    marginBottom: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -84,16 +86,23 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   detail: {
-    alignItems: 'flex-start',
+    flex: 1,
+    minWidth: 0, // Allows text truncation to work properly
   },
   detailLabel: {
     fontSize: 12,
     color: '#666',
-    marginBottom: 2,
+    marginBottom: 4,
   },
   detailValue: {
     fontSize: 14,
     fontWeight: '500',
+  },
+  higherValue: {
+    color: '#2ecc71', // Green for higher camera values
+  },
+  lowerValue: {
+    color: '#e74c3c', // Red for lower camera values
   },
   currencyRow: {
     flexDirection: 'row',

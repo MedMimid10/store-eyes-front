@@ -7,8 +7,10 @@ type Meal = {
   title: string;
   image: string;
   pricePerUnit: number;
-  soldUnits: number;
-  totalPrice: number;
+  soldUnitsSystem: number;
+  soldUnitsCamera: number;
+  totalPriceSystem: number;
+  totalPriceCamera: number;
   category: string;
   time: string;
 };
@@ -28,8 +30,8 @@ const MealListContainer = ({ meals }: MealListContainerProps) => {
             title={item.title}
             image={item.image}
             pricePerUnit={item.pricePerUnit}
-            soldUnits={item.soldUnits}
-            totalPrice={item.totalPrice}
+            soldUnitsSystem={item.soldUnitsSystem}
+            soldUnitsCamera={item.soldUnitsCamera}
           />
         )}
         showsVerticalScrollIndicator={false}
@@ -44,7 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
-    paddingBottom: 20,
+    paddingBottom: 10,
   }
 });
 

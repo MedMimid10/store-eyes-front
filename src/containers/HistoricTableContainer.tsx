@@ -12,6 +12,7 @@ import {
 
 import CategoryFilter from '../components/CategoryFilter';
 import HistoricCard from '../components/HistoricCard';
+import TimeFilterDropdown from '../components/TimeFilterDropdown';
 
 import AlertRed from '../assets/AlrtRed.svg';
 
@@ -111,21 +112,18 @@ const CATEGORY_OPTIONS = ['All', 'Cleaning Table', 'Serving Table'];
 const HistoricTableContainer: React.FC = () => {
     const { t } = useTranslation();
 
-    // Time filter options - no 'all' option
+    // Time filter options - to be shown in dropdown
     const TIME_FILTER_OPTIONS = [
-        { key: 'today',     label: t('today') },
-        { key: 'lastWeek',  label: t('lastWeek') },
-        { key: 'lastMonth', label: t('lastMonth') },
+        t('today'),
+        t('lastWeek'),
+        t('lastMonth')
     ];
 
-    const [selectedTime,     setSelectedTime]     = useState<string>(TIME_FILTER_OPTIONS[0].key);
-    const [showTimeDropdown, setShowTimeDropdown] = useState(false);
+    const [selectedTime, setSelectedTime] = useState<string>(TIME_FILTER_OPTIONS[0]);
     const [selectedCategory, setSelectedCategory] = useState(CATEGORY_OPTIONS[0]);
 
-    const toggleTimeDropdown = () => setShowTimeDropdown(!showTimeDropdown);
-    const chooseTime = (key: string) => {
-        setSelectedTime(key);
-        setShowTimeDropdown(false);
+    const handleTimeFilterChange = (time: string) => {
+        setSelectedTime(time);
     };
 
     // Filtrage combiné : catégorie + temps (cumulative time filtering)
@@ -138,18 +136,18 @@ const HistoricTableContainer: React.FC = () => {
         // Temps - cumulative filtering
         const txt = item.time.toLowerCase();
         
-        if (selectedTime === 'today') {
+        if (selectedTime === t('today')) {
             return txt.includes('today');
         }
         
-        if (selectedTime === 'lastWeek') {
+        if (selectedTime === t('lastWeek')) {
             return txt.includes('today') || 
                    txt.includes('yesterday') || 
                    (txt.match(/(\d+)\s+days\s+ago/) !== null && 
                     Number(txt.match(/(\d+)\s+days\s+ago/)![1]) <= 7);
         }
         
-        if (selectedTime === 'lastMonth') {
+        if (selectedTime === t('lastMonth')) {
             return txt.includes('today') || 
                    txt.includes('yesterday') || 
                    txt.match(/(\d+)\s+days\s+ago/) !== null || 
@@ -166,49 +164,26 @@ const HistoricTableContainer: React.FC = () => {
             {/* Entête + filtre temps */}
             <View style={styles.headerRow}>
                 <Text style={styles.header}>{t('historic')}</Text>
-                <View style={{ position: 'relative' }}>
-                    <TouchableOpacity
-                        style={styles.timeFilterButton}
-                        onPress={toggleTimeDropdown}
-                    >
-                        <Text style={styles.timeFilter}>
-                            {TIME_FILTER_OPTIONS.find(o => o.key === selectedTime)?.label}
-                        </Text>
-                        <Feather name="chevron-down" size={16} color="#666" />
-                    </TouchableOpacity>
-
-                    {showTimeDropdown && (
-                        <View style={styles.timeFilterDropdown}>
-                            {TIME_FILTER_OPTIONS.map(opt => (
-                                <TouchableOpacity
-                                    key={opt.key}
-                                    style={styles.timeFilterOption}
-                                    onPress={() => chooseTime(opt.key)}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.timeFilterOptionText,
-                                            opt.key === selectedTime && styles.selectedTimeFilterOption
-                                        ]}
-                                    >
-                                        {opt.label}
-                                    </Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    )}
-                </View>
+                <TimeFilterDropdown 
+                    options={TIME_FILTER_OPTIONS}
+                    onSelect={handleTimeFilterChange}
+                    initialOption={TIME_FILTER_OPTIONS[0]}
+                    label=""
+                />
             </View>
 
             {/* Filtre de catégorie */}
-            <CategoryFilter
-                categories={CATEGORY_OPTIONS}
-                initialCategory={selectedCategory}
-                onCategoryChange={setSelectedCategory}
-            />
+            <View style={styles.categoryFilterContainer}>
+                <CategoryFilter
+                    categories={CATEGORY_OPTIONS}
+                    initialCategory={selectedCategory}
+                    onCategoryChange={setSelectedCategory}
+                />
+            </View>
 
             {/* Liste des cartes */}
             <ScrollView
+                style={styles.scrollView}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.list}
             >
@@ -229,15 +204,14 @@ const HistoricTableContainer: React.FC = () => {
 
 const styles = StyleSheet.create({
     wrapper: {
+        marginTop: 12,
         flex: 1,
-        marginTop: 20,
-        backgroundColor: '#F8F8F8',
     },
     headerRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 15,
+        marginBottom: 10,
     },
     header: {
         fontFamily: 'Raleway',
@@ -245,9 +219,11 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         color: '#000',
     },
+    scrollView: {
+        flex: 1,
+    },
     list: {
-        paddingTop: 10,
-        paddingBottom: 20,
+        paddingBottom: 10,
     },
     timeFilterButton: {
         flexDirection: 'row',
@@ -280,10 +256,13 @@ const styles = StyleSheet.create({
     timeFilterOption: {
         paddingVertical: 6,
         paddingHorizontal: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
     },
     timeFilterOptionText: {
         fontSize: 12,
         color: '#333',
+        fontFamily: 'Raleway',
     },
     selectedTimeFilterOption: {
         fontWeight: 'bold',
@@ -295,6 +274,8 @@ const styles = StyleSheet.create({
         fontFamily: 'Raleway',
         marginRight: 6,
     },
+    categoryFilterContainer: {
+    }
 });
 
 export default HistoricTableContainer;

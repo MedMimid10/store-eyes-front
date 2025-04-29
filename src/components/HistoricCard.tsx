@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#fff',
         borderRadius: 12,
-        marginTop :10,
+        marginBottom:10
     },
    /* leftIconWrapper: {
         width: 62,

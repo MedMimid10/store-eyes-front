@@ -2,12 +2,12 @@ import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ServiceCardsContainer from '../containers/ServiceCardsContainer';
 import StatisticCardsContainer from '../containers/StatisticCardsContainer';
 import '../i18n'; // Import i18n configuration
 import { logout } from '../service/KeycloakService';
-import {useSse} from "../sse/sse-context"
+import { useSse } from "../sse/sse-context";
 
 interface HomeScreenProps {
   onLogout: () => void;
@@ -68,40 +68,60 @@ const HomeScreen = ({ onLogout }: HomeScreenProps) => {
   };
   
   return (
-    <ScrollView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.greeting}>{t('greeting')}</Text>
-          <Text style={styles.username}>Mohammed kacim</Text>
-        </View>
-        <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.languageButton} onPress={toggleLanguage}>
-            <Text style={styles.languageText}>{i18n.language.toUpperCase()}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleLogout}>
-            <Image 
-              source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }} 
-              style={styles.profileImage} 
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+    <View style={styles.mainContainer}>
+      <StatusBar backgroundColor="#2691A3" barStyle="light-content" />
+      
+      {/* iOS status bar background */}
+      {Platform.OS === 'ios' && <View style={styles.iosStatusBar} />}
+      
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.greeting}>{t('greeting')}</Text>
+              <Text style={styles.username}>Mohammed kacim</Text>
+            </View>
+            <View style={styles.headerRight}>
+              <TouchableOpacity style={styles.languageButton} onPress={toggleLanguage}>
+                <Text style={styles.languageText}>{i18n.language.toUpperCase()}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleLogout}>
+                <Image 
+                  source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }} 
+                  style={styles.profileImage} 
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
 
-      {/* Statistics Section */}
-      <StatisticCardsContainer />
+          {/* Statistics Section */}
+          <StatisticCardsContainer />
 
-      {/* Services Section */}
-      <ServiceCardsContainer />
-    </ScrollView>
+          {/* Services Section */}
+          <ServiceCardsContainer />
+        </View>
+      </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
     backgroundColor: '#F5F7F9',
-    padding: 16,
+  },
+  iosStatusBar: {
+    height: Platform.OS === 'ios' ? 40 : 0, // Adjust as needed
+    backgroundColor: '#2691A3',
+  },
+  safeArea: {
+    flex: 1,
+    backgroundColor: Platform.OS === 'ios' ? '#F5F7F9' : 'transparent',
+  },
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
   },
   header: {
     flexDirection: 'row',

@@ -68,14 +68,14 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     width: 80,
-    height: 80,
+    height: 72,
     justifyContent: 'center',
     alignItems: 'center',
   },
   label: {
     color: '#2691A3',
     textAlign: 'center',
-    fontWeight:500,
+    fontWeight:'bold',
     fontSize: 14,
     fontFamily: 'Raleway-Medium',
   },

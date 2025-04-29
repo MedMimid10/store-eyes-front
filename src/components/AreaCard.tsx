@@ -71,9 +71,8 @@ const AreaCard: React.FC<AreaCardProps> = ({
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginTop: 10,
+    marginTop: 15,
     width: '100%',
-    backgroundColor: '#F8F8F8',
   },
   header: {
     fontFamily: 'Raleway',

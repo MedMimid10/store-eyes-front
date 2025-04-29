@@ -17,7 +17,7 @@ const HeaderCompo: React.FC<HeaderCompoProps> = ({ title, subtitle }) => {
         <View style={styles.container}>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                 <View>
-                    <BackBtm width={40} height={40} />
+                    <BackBtm width={38} height={38} />
                 </View>
             </TouchableOpacity>
             <View style={styles.textContainer}>
@@ -31,14 +31,11 @@ const HeaderCompo: React.FC<HeaderCompoProps> = ({ title, subtitle }) => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginVertical: 10,
         alignItems: 'flex-start',
-        backgroundColor: '#F8F8F8',
-
+        marginTop: 5
     },
     backButton: {
         marginRight: 10,
-        marginTop: 4,
     },
     textContainer: {
         flexShrink: 1,
@@ -50,7 +47,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     subtitle: {
-        marginTop: 8,
+        marginTop: 4,
         fontFamily: 'Raleway',
         fontSize: 16,
         fontWeight: '400',

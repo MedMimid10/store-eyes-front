@@ -1,13 +1,13 @@
 import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import StatisticCard from '../components/StatisticCard';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import TimeFilterDropdown from '../components/TimeFilterDropdown';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useSse } from '../sse/sse-context';
-
 
 // Define time filter keys (consistent across languages)
 const TIME_FILTER_KEYS = ['today', 'lastweek', 'lastmonth'];
@@ -20,33 +20,25 @@ const StatisticCardsContainer = ({ onTimeFilterChange }: StatisticCardsContainer
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();  
   const { t, i18n } = useTranslation();
   
-  // Track selected filter by its key, not by the translated text
-  const [selectedFilterKey, setSelectedFilterKey] = useState(TIME_FILTER_KEYS[0]);
-  const [showTimeFilterDropdown, setShowTimeFilterDropdown] = useState(false);
-
+  // Create translated options for TimeFilterDropdown
+  const TIME_FILTER_OPTIONS = TIME_FILTER_KEYS.map(key => t(key));
+  
+  // Track selected filter by its index to easily map back to keys
+  const [selectedFilterIndex, setSelectedFilterIndex] = useState(0);
 
   const {products, totalCount} = useSse();
   
-  // Update when language changes
-  useEffect(() => {
-    // This effect will run when i18n.language changes
-    // We don't need to do anything here, just forcing a re-render
-  }, [i18n.language]);
-  
-  const toggleTimeFilterDropdown = () => {
-    setShowTimeFilterDropdown(!showTimeFilterDropdown);
-  };
-  
-  const selectTimeFilter = (key: string) => {
-    setSelectedFilterKey(key);
-    setShowTimeFilterDropdown(false);
-    if (onTimeFilterChange) {
-      onTimeFilterChange(key);
+  // Handle time filter selection from TimeFilterDropdown
+  const handleTimeFilterChange = (option: string) => {
+    // Find the index of the selected option
+    const index = TIME_FILTER_OPTIONS.findIndex(opt => opt === option);
+    setSelectedFilterIndex(index);
+    
+    // Call the parent's onTimeFilterChange with the corresponding key
+    if (onTimeFilterChange && index >= 0) {
+      onTimeFilterChange(TIME_FILTER_KEYS[index]);
     }
   };
-
-  // Get current filter translated text
-  const selectedFilterTranslated = t(selectedFilterKey);
 
   return (
     <View style={styles.container}>
@@ -54,34 +46,12 @@ const StatisticCardsContainer = ({ onTimeFilterChange }: StatisticCardsContainer
         <Text style={styles.sectionTitle}>{t('statistics')}</Text>
         
         {/* Time Filter Dropdown */}
-        <View>
-          <TouchableOpacity 
-            style={styles.timeFilterButton} 
-            onPress={toggleTimeFilterDropdown}
-          >
-            <Text style={styles.timeFilter}>{selectedFilterTranslated}</Text>
-            <Feather name="chevron-down" size={16} color="#666" />
-          </TouchableOpacity>
-          
-          {showTimeFilterDropdown && (
-            <View style={styles.timeFilterDropdown}>
-              {TIME_FILTER_KEYS.map((key) => (
-                <TouchableOpacity 
-                  key={key} 
-                  style={styles.timeFilterOption}
-                  onPress={() => selectTimeFilter(key)}
-                >
-                  <Text style={[
-                    styles.timeFilterOptionText,
-                    key === selectedFilterKey && styles.selectedTimeFilterOption
-                  ]}>
-                    {t(key)}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </View>
+        <TimeFilterDropdown 
+          options={TIME_FILTER_OPTIONS}
+          onSelect={handleTimeFilterChange}
+          initialOption={TIME_FILTER_OPTIONS[selectedFilterIndex]}
+          label=""
+        />
       </View>
 
       <View style={styles.statisticsGrid}>
@@ -139,57 +109,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     fontFamily: 'Raleway-Bold',
-  },
-  timeFilterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 16,
-    minWidth: 120,
-    justifyContent: 'space-between',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  timeFilter: {
-    fontSize: 12,
-    color: '#666',
-    fontFamily: 'Raleway-Medium',
-    marginRight: 8,
-  },
-  timeFilterDropdown: {
-    position: 'absolute',
-    top: 45,
-    right: 0,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
-    zIndex: 10,
-    minWidth: 120,
-  },
-  timeFilterOption: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  timeFilterOptionText: {
-    fontSize: 14,
-    color: '#666',
-    fontFamily: 'Raleway-Medium',
-  },
-  selectedTimeFilterOption: {
-    color: '#2691A3',
-    fontWeight: '600',
   },
   statisticsGrid: {
     flexDirection: 'column',

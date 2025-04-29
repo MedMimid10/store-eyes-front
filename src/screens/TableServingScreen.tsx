@@ -1,10 +1,14 @@
 import { Feather } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import HeaderCompo from '../components/HeaderCompo';
+import TimeFilterDropdown from '../components/TimeFilterDropdown';
 import TitleHeader from '../components/TitleHeader';
 import TableServingHistoricContainer from '../containers/TableServingHistoricContainer';
-import HeaderCompo from '../components/HeaderCompo';
+
+const { height } = Dimensions.get('window');
 
 // Mock stats data that would be updated based on time filter in a real app
 const initialStats = {
@@ -16,42 +20,36 @@ const initialStats = {
 const TableServingScreen = () => {
   const { t } = useTranslation();
   
-  // Time filter options
-  const TimeFilterOptions = [
-    { key: 'today', label: t('today') },
-    { key: 'lastWeek', label: t('lastWeek') },
-    { key: 'lastMonth', label: t('lastMonth') },
+  // Time filter options as translated strings
+  const TIME_FILTER_OPTIONS = [
+    t('today'),
+    t('lastWeek'),
+    t('lastMonth')
   ];
 
-  const [selectedTimeFilter, setSelectedTimeFilter] = useState(TimeFilterOptions[0].key);
-  const [showTimeFilterDropdown, setShowTimeFilterDropdown] = useState(false);
+  const [selectedTimeFilter, setSelectedTimeFilter] = useState(TIME_FILTER_OPTIONS[0]);
   const [stats, setStats] = useState(initialStats);
 
-  const toggleTimeFilterDropdown = () => {
-    setShowTimeFilterDropdown(!showTimeFilterDropdown);
-  };
-
-  const selectTimeFilter = (filterKey: string) => {
-    setSelectedTimeFilter(filterKey);
-    setShowTimeFilterDropdown(false);
+  const handleTimeFilterChange = (time: string) => {
+    setSelectedTimeFilter(time);
   };
 
   // In a real app, this would fetch updated stats based on the time filter
   useEffect(() => {
     // This is just for demonstration - in a real app, you would fetch data here
-    if (selectedTimeFilter === 'today') {
+    if (selectedTimeFilter === t('today')) {
       setStats({
         totalTableServing: 3,
         tableServedLate: 1,
         tableClearedLate: 1
       });
-    } else if (selectedTimeFilter === 'lastWeek') {
+    } else if (selectedTimeFilter === t('lastWeek')) {
       setStats({
         totalTableServing: 6,
         tableServedLate: 2,
         tableClearedLate: 2
       });
-    } else if (selectedTimeFilter === 'lastMonth') {
+    } else if (selectedTimeFilter === t('lastMonth')) {
       setStats({
         totalTableServing: 10,
         tableServedLate: 4,
@@ -61,139 +59,86 @@ const TableServingScreen = () => {
   }, [selectedTimeFilter]);
 
   return (
-    <View style={styles.container}>
-      <HeaderCompo 
-        title={t('tableServing')} 
-        subtitle={t('trackTableServingInsights')} 
-      />
+    <View style={styles.mainContainer}>
+      <StatusBar backgroundColor="#2691A3" barStyle="light-content" />
       
-      {/* Global Time Filter */}
-      <View style={styles.filterContainer}>
-        <View style={{ position: 'relative' }}>
-          <TouchableOpacity
-            style={styles.timeFilterButton}
-            onPress={toggleTimeFilterDropdown}
-          >
-            <Text style={styles.timeFilter}>
-              {TimeFilterOptions.find(opt => opt.key === selectedTimeFilter)?.label}
-            </Text>
-            <Feather name="chevron-down" size={16} color="#666" />
-          </TouchableOpacity>
-
-          {showTimeFilterDropdown && (
-            <View style={styles.timeFilterDropdown}>
-              {TimeFilterOptions.map(filter => (
-                <TouchableOpacity
-                  key={filter.key}
-                  style={styles.timeFilterOption}
-                  onPress={() => selectTimeFilter(filter.key)}
-                >
-                  <Text
-                    style={[
-                      styles.timeFilterOptionText,
-                      filter.key === selectedTimeFilter && styles.selectedTimeFilterOption,
-                    ]}
-                  >
-                    {filter.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+      {/* iOS status bar background */}
+      {Platform.OS === 'ios' && <View style={styles.iosStatusBar} />}
+      
+      <SafeAreaView style={styles.safeArea} edges={['right', 'left', 'bottom']}>
+        <View style={styles.container}>
+          <HeaderCompo 
+            title={t('tableServing')} 
+            subtitle={t('trackTableServingInsights')} 
+          />
+          
+          {/* Global Time Filter */}
+          <View style={styles.filterContainer}>
+            <TimeFilterDropdown 
+              options={TIME_FILTER_OPTIONS}
+              onSelect={handleTimeFilterChange}
+              initialOption={TIME_FILTER_OPTIONS[0]}
+              label=""
+            />
+          </View>
+          
+          {/* Unified Statistics Card */}
+          <View style={styles.unifiedCardContainer}>
+            <View style={styles.unifiedCard}>
+              <View style={styles.statItem}>
+                <Text style={styles.statValue}>{stats.totalTableServing}</Text>
+                <Text style={styles.statLabel}>{t('totalTableServing')}</Text>
+              </View>
+              <View style={styles.divider} />
+              <View style={styles.statItem}>
+                <Text style={[styles.statValue, styles.alertValue]}>{stats.tableServedLate}</Text>
+                <Text style={styles.statLabel}>{t('tableServedLate')}</Text>
+              </View>
+              <View style={styles.divider} />
+              <View style={styles.statItem}>
+                <Text style={[styles.statValue, styles.alertValue]}>{stats.tableClearedLate}</Text>
+                <Text style={styles.statLabel}>{t('tableClearedLate')}</Text>
+              </View>
             </View>
-          )}
-        </View>
-      </View>
-      
-      {/* Unified Statistics Card */}
-      <View style={styles.unifiedCardContainer}>
-        <View style={styles.unifiedCard}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{stats.totalTableServing}</Text>
-            <Text style={styles.statLabel}>{t('totalTableServing')}</Text>
           </View>
-          <View style={styles.divider} />
-          <View style={styles.statItem}>
-            <Text style={[styles.statValue, styles.alertValue]}>{stats.tableServedLate}</Text>
-            <Text style={styles.statLabel}>{t('tableServedLate')}</Text>
-          </View>
-          <View style={styles.divider} />
-          <View style={styles.statItem}>
-            <Text style={[styles.statValue, styles.alertValue]}>{stats.tableClearedLate}</Text>
-            <Text style={styles.statLabel}>{t('tableClearedLate')}</Text>
-          </View>
-        </View>
-      </View>
 
-      {/* History Section with fixed height */}
-      <View style={styles.historyContainer}>
-        <TableServingHistoricContainer 
-          selectedTimeFilter={selectedTimeFilter}
-          showOnlyAlerts={true}
-        />
-      </View>
+          {/* History Section with fixed height */}
+          <View style={styles.historyContainer}>
+            <TableServingHistoricContainer 
+              selectedTimeFilter={selectedTimeFilter}
+              showOnlyAlerts={true}
+            />
+          </View>
+        </View>
+      </SafeAreaView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
     backgroundColor: '#F5F7F9',
-    paddingHorizontal: 20,
+  },
+  iosStatusBar: {
+    height: Platform.OS === 'ios' ? 40 : 0, // Adjust as needed
+    backgroundColor: '#2691A3',
+  },
+  safeArea: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 4,
   },
   filterContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 10,
-    marginBottom: 16,
-  },
-  timeFilterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  timeFilter: {
-    fontSize: 12,
-    color: '#666',
-    fontFamily: 'Raleway',
-    marginRight: 6,
-  },
-  timeFilterDropdown: {
-    position: 'absolute',
-    top: 40,
-    right: 0,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
-    zIndex: 10,
-    minWidth: 120,
-  },
-  timeFilterOption: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-  },
-  timeFilterOptionText: {
-    fontSize: 12,
-    color: '#333',
-  },
-  selectedTimeFilterOption: {
-    fontWeight: 'bold',
-    color: '#2691A3',
+    marginTop: 15,
   },
   unifiedCardContainer: {
-    marginBottom: 20,
+    marginTop: 10,
   },
   unifiedCard: {
     backgroundColor: '#fff',
@@ -232,6 +177,7 @@ const styles = StyleSheet.create({
   },
   historyContainer: {
     flex: 1,
+    height: height * 0.4,
   },
 });
 

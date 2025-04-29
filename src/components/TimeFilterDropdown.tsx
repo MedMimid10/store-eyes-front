@@ -68,8 +68,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingVertical: 10,
   },
   label: {
     fontSize: 16,
@@ -83,7 +82,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 16,
-    minWidth: 120,
     justifyContent: 'space-between',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -98,7 +96,7 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     position: 'absolute',
-    top: 45,
+    top: 40,
     right: 0,
     backgroundColor: 'white',
     borderRadius: 8,
@@ -123,7 +121,7 @@ const styles = StyleSheet.create({
   },
   selectedOptionText: {
     color: '#2691A3',
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
 });
 
