@@ -22,7 +22,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#e0f9fc"
       },
       "package": "com.msahtani.storeeyesfront",
       "runtimeVersion": "1.0.0"
