@@ -44,7 +44,8 @@ const AreaCard: React.FC<AreaCardProps> = ({
           <View style={styles.detailRow} key={index}>
             {item.label && (
               <Text style={styles.label}>{item.label}</Text>
-            )}            <View style={styles.valueContainer}>
+            )}
+            <View style={styles.valueContainer}>
               {item.image && <Image source={item.image} style={styles.avatar} />}
               <Text style={[styles.value, item.isTitle && styles.titleValue]} numberOfLines={1}>
                 {item.value}

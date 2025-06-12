@@ -22,22 +22,21 @@ export interface HistoricCardProps {
 
 
 const HistoricCard: React.FC<HistoricCardProps> = ({
-                                                       title,
-                                                       by,
-                                                       time,
-                                                       image, // ✅ AJOUT ICI aussi !
-                                                       onPress,
-                                                       AlertIcon,
-                                                   }) => {
+    title,
+    by,
+    time,
+    image,
+    onPress,
+    AlertIcon,
+}) => {
     const { t } = useTranslation();
-    
+
     return (
         <TouchableOpacity
             style={styles.card}
             onPress={onPress}
             activeOpacity={0.7}
         >
-            {/* 1) Cercle avec SVG alerte */}
             <View style={styles.leftIconWrapper}>
                 {AlertIcon && <View><AlertIcon width={62} height={62} /></View>}
                 {image && (
@@ -50,7 +49,7 @@ const HistoricCard: React.FC<HistoricCardProps> = ({
             </View>
 
 
-            {/* 2) Texte */}
+
             <View style={styles.content}>
                 <Text style={styles.title}>{title}</Text>
                 <View style={styles.metaRow}>
@@ -86,20 +85,20 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#fff',
         borderRadius: 12,
-        marginBottom:10
+        marginBottom: 10
     },
-   /* leftIconWrapper: {
-        width: 62,
-        height: 62,
-        borderRadius: 30,
-        backgroundColor: '#F8F8F8',
-      //  borderWidth: 1,
-      //  borderColor: '#4B4B4B',
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'center',
-        marginRight: 12,
-    },*/
+    /* leftIconWrapper: {
+         width: 62,
+         height: 62,
+         borderRadius: 30,
+         backgroundColor: '#F8F8F8',
+       //  borderWidth: 1,
+       //  borderColor: '#4B4B4B',
+         justifyContent: 'center',
+         alignItems: 'center',
+         alignSelf: 'center',
+         marginRight: 12,
+     },*/
     leftIconWrapper: {
         width: 62,
         height: 62,
@@ -155,7 +154,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: 12,
-        flexShrink:0,
+        flexShrink: 0,
     },
     smallImage: {
         width: 28,
