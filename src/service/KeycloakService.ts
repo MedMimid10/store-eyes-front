@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 
-const KEYCLOAK_URL = `http://49.13.89.74:8080/realms/morocco-view/protocol/openid-connect/token`;
+const KEYCLOAK_URL = `https://agence.mview.ma/auth/realms/morocco-view/protocol/openid-connect/token`;
 
 export async function login(username: string, password: string) {
     const form = new URLSearchParams({

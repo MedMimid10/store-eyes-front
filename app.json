@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "store-eyes-front",
-    "slug": "store-eyes-front",
-    "version": "1.0.0",
+    "name": "Storeyes",
+    "slug": "storeyes",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,7 +16,8 @@
       "supportsTablet": true,
       "runtimeVersion": {
         "policy": "appVersion"
-      }
+      },
+      "bundleIdentifier": "com.advancedai.storeeyes"
     },
     "android": {
       "adaptiveIcon": {
