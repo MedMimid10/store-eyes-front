@@ -104,7 +104,7 @@ export const SseProvider = ({ children }: SseProviderProps) => {
       });
 
       setTotalCount(prev => prev + 1);
-
+      
       // Send notification with product details
       sendNotification(productCode, newCount);
     });
@@ -134,19 +134,19 @@ export const SseProvider = ({ children }: SseProviderProps) => {
       const productName = productNames[productCode] || productCode;
       
       await Notifications.scheduleNotificationAsync({
-        content: {
+      content: {
           title: '🍽️ New Product Detected!',
           body: `${productName} detected (Total: ${count})`,
-          sound: 'default',
+        sound: 'default',
           data: { 
             productCode, 
             count,
             timestamp: new Date().toISOString()
           },
           badge: count,
-        },
+      },
         trigger: null, // Show immediately
-      });
+    });
       
       console.log(`Notification sent for ${productName} (count: ${count})`);
     } catch (error) {

@@ -19,7 +19,10 @@
       },
       "bundleIdentifier": "com.advancedai.storeeyes",
       "infoPlist": {
-        "UIBackgroundModes": ["background-processing", "background-fetch"]
+        "UIBackgroundModes": ["fetch", "remote-notification", "processing"],
+        "BGTaskSchedulerPermittedIdentifiers": [
+          "background-sse-check"
+        ]
       }
     },
     "android": {
