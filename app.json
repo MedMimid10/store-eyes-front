@@ -17,7 +17,10 @@
       "runtimeVersion": {
         "policy": "appVersion"
       },
-      "bundleIdentifier": "com.advancedai.storeeyes"
+      "bundleIdentifier": "com.advancedai.storeeyes",
+      "infoPlist": {
+        "UIBackgroundModes": ["background-processing", "background-fetch"]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,7 +28,18 @@
         "backgroundColor": "#e0f9fc"
       },
       "package": "com.msahtani.storeeyesfront",
-      "runtimeVersion": "1.0.0"
+      "runtimeVersion": "1.0.0",
+      "permissions": [
+        "NOTIFICATIONS",
+        "RECEIVE_BOOT_COMPLETED",
+        "WAKE_LOCK"
+      ]
+    },
+    "notification": {
+      "icon": "./src/assets/icon.png",
+      "color": "#2691A3",
+      "androidMode": "default",
+      "androidCollapsedTitle": "StoreEyes Updates"
     },
     "web": {
       "favicon": "./src/assets/favicon.png"

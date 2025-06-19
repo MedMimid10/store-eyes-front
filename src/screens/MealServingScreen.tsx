@@ -6,6 +6,7 @@ import HeaderCompo from '../components/HeaderCompo';
 import TitleHeader from '../components/TitleHeader';
 import MealListContainer from '../containers/MealListContainer';
 import SearchFilterContainer from '../containers/SearchFilterContainer';
+import { useSse } from '../sse/sse-context';
 
 // Enhanced Sample data with category and time
 
@@ -13,6 +14,8 @@ const CATEGORIES = ['All', 'Food', 'Drink'];
 const TIME_OPTIONS = ['Today', 'Last Week', 'Last Month'];
 
 const MealServingScreen = () => {
+  // Get real-time product counts from SSE
+  const { products: sseProducts, totalCount } = useSse();
 
   const MEAL_DATA = [
     {
@@ -25,6 +28,7 @@ const MealServingScreen = () => {
       totalPriceSystem: 375.00,
       totalPriceCamera: 425.00,
       category: 'Drink',
+      code: "coffee",
       time: 'Today'
     },
   
@@ -38,6 +42,7 @@ const MealServingScreen = () => {
       totalPriceSystem: 440.00,
       totalPriceCamera: 528.00,
       category: 'Drink',
+      code: "coffee-latte",
       time: 'Today'
     },
     {
@@ -49,7 +54,8 @@ const MealServingScreen = () => {
       soldUnitsCamera: 9,
       totalPriceSystem: 440.00,
       totalPriceCamera: 396.00,
-      category: 'Drink',
+      category: 'Drink',  
+      code: "tea",
       time: 'Today'
     },
     {
@@ -82,8 +88,8 @@ const MealServingScreen = () => {
       title: 'Fresh Orange Juice',
       image: 'https://cdn.pixabay.com/photo/2017/01/20/14/59/orange-1995044_1280.jpg',
       pricePerUnit: 30.00,
-      soldUnitsSystem: 12,
-      soldUnitsCamera: 14,
+      soldUnitsSystem: 0,
+      soldUnitsCamera: 0,
       totalPriceSystem: 360.00,
       totalPriceCamera: 420.00,
       category: 'Drink',
@@ -107,7 +113,33 @@ const MealServingScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
   const [selectedTimeOption, setSelectedTimeOption] = useState(TIME_OPTIONS[0]);
-  const [meals, setMeals] = useState(MEAL_DATA);
+  
+  // Update meals with SSE camera units
+  const mealsWithSSE = MEAL_DATA.map(meal => {
+    const sseCount = meal.code ? sseProducts[meal.code] : undefined;
+    const cameraUnits = sseCount || meal.soldUnitsCamera;
+    return {
+      ...meal,
+      soldUnitsCamera: cameraUnits,
+      totalPriceCamera: cameraUnits * meal.pricePerUnit
+    };
+  });
+  
+  const [meals, setMeals] = useState(mealsWithSSE);
+  
+  // Update meals when SSE data changes
+  useEffect(() => {
+    const updatedMeals = MEAL_DATA.map(meal => {
+      const sseCount = meal.code ? sseProducts[meal.code] : undefined;
+      const cameraUnits = sseCount || meal.soldUnitsCamera;
+      return {
+        ...meal,
+        soldUnitsCamera: cameraUnits,
+        totalPriceCamera: cameraUnits * meal.pricePerUnit
+      };
+    });
+    setMeals(updatedMeals);
+  }, [sseProducts]);
   
   // Translated time options for UI
   const translatedTimeOptions = TIME_OPTIONS.map(option => t(option.replace(' ', '').toLowerCase()));
@@ -144,11 +176,22 @@ const MealServingScreen = () => {
   const totalPriceSystem = filteredMeals.reduce((sum, meal) => sum + (meal.totalPriceSystem || 0), 0);
   const totalPriceCamera = filteredMeals.reduce((sum, meal) => sum + (meal.totalPriceCamera || 0), 0);
 
-  // For debugging
+  // For debugging - also log SSE data
   useEffect(() => {
     console.log('Selected time option:', selectedTimeOption);
     console.log('Filtered meals count:', filteredMeals.length);
-  }, [selectedTimeOption, filteredMeals.length]);
+    console.log('SSE Products:', sseProducts);
+    console.log('Total SSE Count:', totalCount);
+  }, [selectedTimeOption, filteredMeals.length, sseProducts, totalCount]);
+
+  // Print product counts by code
+  useEffect(() => {
+    console.log('=== Real-time Product Counts by Code ===');
+    Object.entries(sseProducts).forEach(([code, count]) => {
+      console.log(`${code}: ${count}`);
+    });
+    console.log(`Total products detected: ${totalCount}`);
+  }, [sseProducts, totalCount]);
 
   return (
     <View style={styles.mainContainer}>
