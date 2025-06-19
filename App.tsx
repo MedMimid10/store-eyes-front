@@ -6,42 +6,11 @@ import './src/i18n';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { SseContext } from './src/sse/sse-context';
 import { SseProvider } from './src/sse/sse-provider';
-import { BackgroundService } from './src/service/BackgroundService';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
-  // Initialize background services
-  useEffect(() => {
-    const setupBackgroundServices = async () => {
-      // Register background fetch for SSE monitoring
-      await BackgroundService.registerBackgroundFetch();
-      
-      // Handle app state changes
-      const handleAppStateChange = (nextAppState: string) => {
-        console.log('App state changed to:', nextAppState);
-        
-        if (nextAppState === 'background') {
-          console.log('App went to background - setting up background SSE');
-          BackgroundService.setupBackgroundSSE();
-        } else if (nextAppState === 'active') {
-          console.log('App became active - closing background SSE');
-          BackgroundService.closeBackgroundSSE();
-        }
-      };
-
-      const subscription = AppState.addEventListener('change', handleAppStateChange);
-      
-      return () => {
-        subscription?.remove();
-        BackgroundService.unregisterBackgroundFetch();
-        BackgroundService.closeBackgroundSSE();
-      };
-    };
-
-    setupBackgroundServices();
-  }, []);
-
+ 
   // Au démarrage, on voit si on a déjà un token valide
   useEffect(() => {
     (async () => {

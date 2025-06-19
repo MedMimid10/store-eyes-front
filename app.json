@@ -17,13 +17,8 @@
       "runtimeVersion": {
         "policy": "appVersion"
       },
-      "bundleIdentifier": "com.advancedai.storeeyes",
-      "infoPlist": {
-        "UIBackgroundModes": ["fetch", "remote-notification", "processing"],
-        "BGTaskSchedulerPermittedIdentifiers": [
-          "background-sse-check"
-        ]
-      }
+      "bundleIdentifier": "com.advancedai.storeeyes"
+      
     },
     "android": {
       "adaptiveIcon": {
