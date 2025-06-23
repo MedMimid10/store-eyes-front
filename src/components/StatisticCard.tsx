@@ -37,7 +37,7 @@ const StatisticCard: React.FC<StatisticCardProps> = ({ title, value, hasAlert, s
             {/* TOP */}
             <View style={styles.topRow}>
                 <Text style={styles.title}>{title}</Text>
-                <Feather name="chevron-right" size={16} color="gray" />
+                {onPress && <Feather name="chevron-right" size={16} color="gray" />}
             </View>
 
             {/* MIDDLE */}

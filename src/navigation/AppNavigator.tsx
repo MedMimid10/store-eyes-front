@@ -33,13 +33,11 @@ type Props = {
 export function AppNavigator({ isLoggedIn, onLogin, onLogout }: Props) {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Start">
-        {/* StartScreen toujours affiché en premier */}
         <Stack.Screen name="Start">
           {(props) => <StartScreen {...props} isLoggedIn={isLoggedIn} />}
         </Stack.Screen>
   
         {isLoggedIn ? (
-          // ─── Utilisateur déjà authentifié → Start → Home ──────────────
           <>
             <Stack.Screen name="Home">
               {(props) => <HomeScreen {...props} onLogout={onLogout} />}
@@ -50,7 +48,7 @@ export function AppNavigator({ isLoggedIn, onLogin, onLogout }: Props) {
             <Stack.Screen name="TableServing" component={TableServingScreen} />
           </>
         ) : (
-          // ─── Utilisateur non-authentifié → Start → Launch → Login ────────
+  
           <>
             <Stack.Screen name="Launch" component={LaunchScreen} />
             <Stack.Screen name="Login">

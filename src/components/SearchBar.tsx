@@ -23,9 +23,9 @@ const SearchBar = ({ placeholder, onSearch, onFilter }: SearchBarProps) => {
           onChangeText={onSearch}
         />
       </View>
-      <TouchableOpacity style={styles.filterButton} onPress={onFilter}>
+      {/* <TouchableOpacity style={styles.filterButton} onPress={onFilter}>
         <Ionicons name="options-outline" size={20} color="#000" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

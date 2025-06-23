@@ -14,9 +14,9 @@ const ServiceCardsContainer = ({ onViewAll }: ServiceCardsContainerProps) => {
     <View style={styles.container}>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>{t('services')}</Text>
-        <TouchableOpacity onPress={onViewAll}>
+        {/* <TouchableOpacity onPress={onViewAll}>
           <Text style={styles.viewAll}>{t('viewAll')}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <View style={styles.servicesContainer}>

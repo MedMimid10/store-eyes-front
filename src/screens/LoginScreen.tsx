@@ -15,8 +15,8 @@ interface LoginScreenProps {
 
 export default function LoginScreen({ onLogin }: LoginScreenProps) {
     const { t } = useTranslation();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('admin@admin.ma');
+    const [password, setPassword] = useState('admin1234');
 
     const handleLogin = async () => {
         try {
@@ -43,19 +43,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
                     <Text style={styles.accessText}>{t('login.accessAccount')}</Text>
                 </View>
 
-                <Text style={styles.connectText}>{t('login.connectWith')}</Text>
-                <Button
-                    title={t('login.google')}
-                    onPress={handleGoogleAuth}
-                    style={styles.googleButton}
-                    icon={<GoogleIcon width={24} height={24} />}
-                />
-
-                <View style={styles.dividerContainer}>
-                    <View style={styles.divider} />
-                    <Text style={styles.orText}>{t('login.or')}</Text>
-                    <View style={styles.divider} />
-                </View>
+                
 
                 <Text style={styles.subtitle}>{t('login.enterCredentials')}</Text>
 
@@ -82,12 +70,12 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
                     style={styles.button}
                 />
 
-                <Text style={styles.link}>
+                {/* <Text style={styles.link}>
                     {t('login.forgotPassword')} <Text style={styles.linkText}>{t('login.reset')}</Text>
                 </Text>
                 <Text style={styles.link}>
                     {t('login.needAccount')} <Text style={styles.linkText}>{t('login.register')}</Text>
-                </Text>
+                </Text> */}
             </View>
         </LinearGradient>
     );

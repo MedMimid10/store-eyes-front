@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect, useRef} from "react"
 import {useSse, SseContext} from "./sse-context"
 import EventSource from 'react-native-sse';
 import * as Notifications from 'expo-notifications';
-import { Platform } from 'react-native';
+import { Platform, AppState, AppStateStatus } from 'react-native';
+import { SENTRY_DSN } from "@env";
 
 interface SseProviderProps {
   children: React.ReactNode;
@@ -23,6 +24,8 @@ export const SseProvider = ({ children }: SseProviderProps) => {
   const [products, setProducts] = useState<Record<string, number>>({});
   const [totalCount, setTotalCount] = useState<number>(0);
   const [notificationToken, setNotificationToken] = useState<string | null>(null);
+  const eventSourceRef = useRef<EventSource | null>(null);
+  const appState = useRef(AppState.currentState);
 
   // Request notification permissions and get push token
   useEffect(() => {
@@ -84,42 +87,101 @@ export const SseProvider = ({ children }: SseProviderProps) => {
     return () => foregroundSubscription.remove();
   }, []);
 
-  useEffect(() => {
-    const eventSource = new EventSource('https://storeyes.io/api/sse?clientId=123');
+  // Function to connect to SSE
+  const connectSSE = (send: boolean) => {
+    if (eventSourceRef.current) {
+      console.log('SSE already connected');
+      return;
+    }
+
+    console.log('Connecting to SSE...');
+    
+    
+    const eventSource = new EventSource('http://192.168.0.226:9090/sse?clientId=123&send=true');
+    eventSourceRef.current = eventSource;
   
     eventSource.addEventListener("message", (event) => {
-      const {productCode} = JSON.parse(event.data!);
-      console.log('New SSE message:', productCode);
-
+      const {productCode, count} = JSON.parse(event.data!);
+      console.log('New SSE message:', productCode, count);
+      const increment = count ? count : 1;
       // Update product counts
-      let newCount = 0;
+
+      
       setProducts(prev => {
+        let newCount = 0;
         const existingProduct = prev[productCode];
         if (existingProduct) {
-          newCount = existingProduct + 1;
+          newCount = existingProduct + increment;
           return { ...prev, [productCode]: newCount };
         }
-        newCount = 1;
+        newCount = increment;
+        
         return { ...prev, [productCode]: newCount };
       });
 
-      setTotalCount(prev => prev + 1);
-      
-      // Send notification with product details
-      sendNotification(productCode, newCount);
+      setTotalCount(prev => prev + increment);
+
+      if (send) {
+        sendNotification(productCode);
+      }
+
     });
 
     eventSource.addEventListener("error", (event) => {
       console.error('SSE connection error:', event);
-      eventSource.close();
+      disconnectSSE();
     });
+  };
+
+  // Function to disconnect from SSE
+  const disconnectSSE = () => {
+    if (eventSourceRef.current) {
+      console.log('Disconnecting from SSE...');
+      eventSourceRef.current.close();
+      eventSourceRef.current = null;
+    }
+  };
+
+  // Handle app state changes
+  useEffect(() => {
+    const handleAppStateChange = (nextAppState: AppStateStatus) => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        console.log('App has come to the foreground, reconnecting SSE');
+        connectSSE(false);
+      } else if (
+        appState.current === 'active' &&
+        nextAppState.match(/inactive|background/)
+      ) {
+        console.log('App has gone to the background, disconnecting SSE');
+        // Clear previous data when reconnecting
+        setProducts({});
+        setTotalCount(0);
+        disconnectSSE();
+      }
+
+      appState.current = nextAppState;
+    };
+
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
 
     return () => {
-      eventSource.close();
+      subscription?.remove();
     };
   }, []);
 
-  const sendNotification = async (productCode: string, count: number) => {
+  // Initial connection when component mounts
+  useEffect(() => {
+    connectSSE(true);
+    
+    return () => {
+      disconnectSSE();
+    };
+  }, []);
+
+  const sendNotification = async (productCode: string) => {
     try {
       const productNames: Record<string, string> = {
         'coffee': 'Coffee',
@@ -136,19 +198,18 @@ export const SseProvider = ({ children }: SseProviderProps) => {
       await Notifications.scheduleNotificationAsync({
       content: {
           title: '🍽️ New Product Detected!',
-          body: `${productName} detected (Total: ${count})`,
+          body: `${productName} detected`,
         sound: 'default',
           data: { 
             productCode, 
-            count,
             timestamp: new Date().toISOString()
           },
-          badge: count,
+          badge: 1,
       },
         trigger: null, // Show immediately
     });
       
-      console.log(`Notification sent for ${productName} (count: ${count})`);
+      console.log(`Notification sent for ${productName}`);
     } catch (error) {
       console.error('Error sending notification:', error);
     }
