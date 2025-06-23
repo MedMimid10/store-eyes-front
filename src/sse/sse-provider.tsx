@@ -97,7 +97,7 @@ export const SseProvider = ({ children }: SseProviderProps) => {
     console.log('Connecting to SSE...');
     
     
-    const eventSource = new EventSource('http://storeyes.io/api/sse?clientId=123&send=true');
+    const eventSource = new EventSource('https://storeyes.io/api/sse?clientId=123&send=true');
     eventSourceRef.current = eventSource;
   
     eventSource.addEventListener("message", (event) => {
