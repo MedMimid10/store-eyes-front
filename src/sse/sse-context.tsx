@@ -7,6 +7,7 @@ interface SseContextType {
   products: Record<string, number>;
   totalCount: number;
   notificationToken: string | null;
+  loading: boolean;
 }
   
 export const SseContext = createContext<SseContextType>({} as SseContextType);

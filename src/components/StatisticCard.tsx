@@ -9,10 +9,10 @@ interface StatisticCardProps {
     hasAlert: boolean;
     showCurrency?: boolean;
     onPress?: () => void;
-    
+    loading?: boolean;
 }
 
-const StatisticCard: React.FC<StatisticCardProps> = ({ title, value, hasAlert, showCurrency = false, onPress }) => {
+const StatisticCard: React.FC<StatisticCardProps> = ({ title, value, hasAlert, showCurrency = false, onPress, loading = false }) => {
     // Split value if it contains currency
     let mainValue = value;
     let currencyValue = '';
@@ -42,18 +42,26 @@ const StatisticCard: React.FC<StatisticCardProps> = ({ title, value, hasAlert, s
 
             {/* MIDDLE */}
             <View style={styles.valueContainer}>
-                <View style={styles.valueRow}>
-                    <Text style={styles.value}>{mainValue}</Text>
-                    {showCurrency && <Text style={styles.currency}>{currencyValue}</Text>}
-                </View>
-                
-                {/* Alert icon for Non-resolved Alert */}
-                {hasAlert && (
-                    <View style={styles.alertIconContainer}>
-                        <View>
-                            <AlertIcon width={16} height={16} />
-                        </View>
+                {loading ? (
+                    <View style={styles.loadingContainer}>
+                        <View style={styles.loadingSkeleton} />
                     </View>
+                ) : (
+                    <>
+                        <View style={styles.valueRow}>
+                            <Text style={styles.value}>{mainValue}</Text>
+                            {showCurrency && <Text style={styles.currency}>{currencyValue}</Text>}
+                        </View>
+                        
+                        {/* Alert icon for Non-resolved Alert */}
+                        {hasAlert && (
+                            <View style={styles.alertIconContainer}>
+                                <View>
+                                    <AlertIcon width={16} height={16} />
+                                </View>
+                            </View>
+                        )}
+                    </>
                 )}
             </View>
 
@@ -123,6 +131,15 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    loadingContainer: {
+        flex: 1,
+    },
+    loadingSkeleton: {
+        height: 20,
+        backgroundColor: '#E0E0E0',
+        borderRadius: 4,
+        width: '60%',
     },
 });
 

@@ -24,6 +24,7 @@ export const SseProvider = ({ children }: SseProviderProps) => {
   const [products, setProducts] = useState<Record<string, number>>({});
   const [totalCount, setTotalCount] = useState<number>(0);
   const [notificationToken, setNotificationToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const eventSourceRef = useRef<EventSource | null>(null);
   const appState = useRef(AppState.currentState);
 
@@ -87,8 +88,36 @@ export const SseProvider = ({ children }: SseProviderProps) => {
     return () => foregroundSubscription.remove();
   }, []);
 
+  // Function to load initial data
+  const loadInitialData = async () => {
+    try {
+      setLoading(true);
+      console.log('Loading initial data from SSE...');
+      const response = await fetch('https://storeyes.io/api/sse/load?clientId=123');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data: Record<string, number> = await response.json();
+      console.log('Initial data loaded:', data);
+      
+      // Update products state with loaded data
+      setProducts(data);
+      
+      // Calculate and update total count
+      const total = Object.values(data).reduce((sum, count) => sum + count, 0);
+      setTotalCount(total);
+      
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading initial data:', error);
+      setLoading(false);
+    }
+  };
+
   // Function to connect to SSE
-  const connectSSE = (send: boolean) => {
+  const connectSSE = async (isInitialConnection: boolean) => {
     if (eventSourceRef.current) {
       console.log('SSE already connected');
       return;
@@ -96,13 +125,21 @@ export const SseProvider = ({ children }: SseProviderProps) => {
 
     console.log('Connecting to SSE...');
     
+    // Load initial data only on first connection
+    if (isInitialConnection) {
+      await loadInitialData();
+    }
     
     const eventSource = new EventSource('https://storeyes.io/api/sse?clientId=123&send=true');
     eventSourceRef.current = eventSource;
+
+    eventSource.addEventListener("open", (event) => {
+      console.log("---------- CONNECTED TO SSE ----------");
+    });
   
     eventSource.addEventListener("message", (event) => {
       const {productCode, count} = JSON.parse(event.data!);
-      console.log('New SSE message:', productCode, count);
+      //console.log('New SSE message:', productCode, count);
       const increment = count ? count : 1;
       // Update product counts
 
@@ -121,7 +158,7 @@ export const SseProvider = ({ children }: SseProviderProps) => {
 
       setTotalCount(prev => prev + increment);
 
-      if (send) {
+      if (isInitialConnection) {
         sendNotification(productCode);
       }
 
@@ -149,8 +186,9 @@ export const SseProvider = ({ children }: SseProviderProps) => {
         appState.current.match(/inactive|background/) &&
         nextAppState === 'active'
       ) {
-        console.log('App has come to the foreground, reconnecting SSE');
-        connectSSE(false);
+        console.log('App has come to the foreground, reconnecting SSE and reloading data');
+        setLoading(true);
+        connectSSE(true);
       } else if (
         appState.current === 'active' &&
         nextAppState.match(/inactive|background/)
@@ -159,6 +197,7 @@ export const SseProvider = ({ children }: SseProviderProps) => {
         // Clear previous data when reconnecting
         setProducts({});
         setTotalCount(0);
+        setLoading(true);
         disconnectSSE();
       }
 
@@ -216,7 +255,7 @@ export const SseProvider = ({ children }: SseProviderProps) => {
   };
 
   return (
-    <SseContext.Provider value={{ products, totalCount, notificationToken }} >
+    <SseContext.Provider value={{ products, totalCount, notificationToken, loading }} >
       {children}
     </SseContext.Provider>
   );

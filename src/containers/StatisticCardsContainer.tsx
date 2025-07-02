@@ -26,7 +26,7 @@ const StatisticCardsContainer = ({ onTimeFilterChange }: StatisticCardsContainer
   // Track selected filter by its index to easily map back to keys
   const [selectedFilterIndex, setSelectedFilterIndex] = useState(0);
 
-  const {products, totalCount} = useSse();
+  const {products, totalCount, loading} = useSse();
   
   // Handle time filter selection from TimeFilterDropdown
   const handleTimeFilterChange = (option: string) => {
@@ -59,16 +59,18 @@ const StatisticCardsContainer = ({ onTimeFilterChange }: StatisticCardsContainer
           <View style={styles.statisticColumnLeft}>
             <StatisticCard 
               title={t('totalRevenue')} 
-              value="1000,00 MAD"
+              value={`${totalCount * 15} MAD`}
               hasAlert={false}
               showCurrency={true}
+              loading={loading}
             />
           </View>
           <View style={styles.statisticColumnRight}>
             <StatisticCard 
               title={t('totalSold')} 
-              value="160" 
-              hasAlert={false} 
+              value={`${totalCount} units`} 
+              hasAlert={false}
+              loading={loading}
             />
           </View>
         </View>
@@ -79,6 +81,7 @@ const StatisticCardsContainer = ({ onTimeFilterChange }: StatisticCardsContainer
               title={t('nonResolvedAlert')} 
               value="0"
               hasAlert={true}
+              loading={loading}
               onPress={() => navigation.navigate('Alert')}
             />
           </View>
@@ -86,7 +89,8 @@ const StatisticCardsContainer = ({ onTimeFilterChange }: StatisticCardsContainer
             <StatisticCard 
               title={t('totalConsumation')} 
               value={totalCount}
-              hasAlert={false} 
+              hasAlert={false}
+              loading={loading}
             />
           </View>
         </View>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "89047853053",
+    "project_id": "storeyes-notif",
+    "storage_bucket": "storeyes-notif.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89047853053:android:8b568b6ba5b39949de5b94",
+        "android_client_info": {
+          "package_name": "com.advancedai.storeeyes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwWMz-mCAU3s6EWjQFKjzg47x5sVaNJEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
